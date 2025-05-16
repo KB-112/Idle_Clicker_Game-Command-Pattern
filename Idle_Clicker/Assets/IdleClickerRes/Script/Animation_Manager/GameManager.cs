@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using IdleClicker.ScoreRef;
 
-namespace IdleClicker
+namespace IdleClicker.AM
 {
     public class GameManager : UIStateObserver<Button>
     {

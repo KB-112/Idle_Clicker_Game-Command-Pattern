@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace IdleClicker.UITween
+namespace IdleClicker.AM
 {
     [CreateAssetMenu(fileName = "UIAnimData", menuName = "ScriptableObjects/UIAnimations", order = 1)]
     public class UIAnimation : ScriptableObject

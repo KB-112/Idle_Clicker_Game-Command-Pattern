@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace IdleClicker
+namespace IdleClicker.ScoreRef
 {
     [CreateAssetMenu(fileName = "ScoreCont", menuName = "ScriptableObjects/ScoreCont", order = 3)]
     public class ScoreCont : ScriptableObject

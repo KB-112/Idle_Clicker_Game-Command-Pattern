@@ -1,16 +1,16 @@
-using IdleClicker.UITween;
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace IdleClicker
+namespace IdleClicker.AM
 {
     public class UIPanelManager : MonoBehaviour, IButtonCommand
     {
         [Header("Close Button")]
         [SerializeField] private GameObject panel;
-        [SerializeField] private UIAnimation uiAnimationClose;
+        [SerializeField] private UIAnimation uiAnimationClose;    
         [SerializeField] private List<Button> buttonList;
         [Header("Buttons to Animate")]
         public RectTransform rectAnimate;
@@ -36,7 +36,7 @@ namespace IdleClicker
         private void PanelInit()
         {
             panel.SetActive(true);
-            uiAnimationClose.ApplyEffect("Panel", rectAnimate);
+            uiAnimationClose.ApplyEffect("Panel", rectAnimate,null);
             Debug.Log("Any button pressed");
         }
 

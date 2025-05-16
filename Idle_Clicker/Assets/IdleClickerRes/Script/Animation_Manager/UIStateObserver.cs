@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace IdleClicker
+namespace IdleClicker.AM
 {
     public interface IObserver<T>
     {

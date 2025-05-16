@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
-namespace IdleClicker
+
+namespace IdleClicker.ScoreRef
 {
     [CreateAssetMenu(fileName = "ShopCont", menuName = "ScriptableObjects/ShopCont", order = 4)]
     public class ShopCont : ScriptableObject

@@ -1,10 +1,9 @@
-using DG.Tweening.Core.Easing;
-using IdleClicker.UITween;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace IdleClicker
+
+namespace IdleClicker.AM
 {
     public class UIAnimationController : MonoBehaviour, IButtonCommand
     {

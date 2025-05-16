@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace IdleClicker
+namespace IdleClicker.ScoreRef
 {
 
     public class StatManager : IButtonCommand

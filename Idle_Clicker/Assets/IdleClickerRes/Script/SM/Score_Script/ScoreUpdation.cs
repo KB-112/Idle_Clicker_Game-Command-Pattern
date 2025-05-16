@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 
-namespace IdleClicker
+namespace IdleClicker.ScoreRef
 {
     public class ScoreUpdation : MonoBehaviour, IButtonCommand
     {
