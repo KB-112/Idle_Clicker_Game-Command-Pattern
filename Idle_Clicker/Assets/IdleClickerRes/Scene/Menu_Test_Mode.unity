@@ -390,6 +390,8 @@ GameObject:
   - component: {fileID: 86086876}
   - component: {fileID: 86086877}
   - component: {fileID: 86086878}
+  - component: {fileID: 86086879}
+  - component: {fileID: 86086880}
   m_Layer: 0
   m_Name: New_Script_Manger
   m_TagString: Untagged
@@ -536,7 +538,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86086871}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e21d8698444631a4ca3279808c0c6d2e, type: 3}
   m_Name: 
@@ -571,6 +573,63 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0.74299574, a: 0.6}
   - {r: 0, g: 0.16808224, b: 1, a: 0.6}
   characterAnimator: {fileID: 1383768853}
+--- !u!114 &86086879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86086871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ea10175569fdf4db38deca1c5aec6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinFucConfig:
+    clickThresholds:
+    - {x: 0, y: 3}
+    - {x: 3, y: 6}
+    - {x: 6, y: 9}
+    - {x: 9, y: 11}
+    - {x: 11, y: 13}
+  loopCount: 0
+  rangeCount: 0
+  hit: 0
+--- !u!114 &86086880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86086871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2312995b05054ed4e9a54f32ac9a849d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  multiplierBarManager:
+    multiplierBars:
+    - multiplierBarFillRange: {x: 0, y: 0.3}
+      multiplierBarAnimationSpeeds: 0.5
+      multiplierBarColor: {r: 0.18758917, g: 1, b: 0, a: 1}
+    - multiplierBarFillRange: {x: 0, y: 0.5}
+      multiplierBarAnimationSpeeds: 0.2
+      multiplierBarColor: {r: 1, g: 0.9550089, b: 0, a: 1}
+    - multiplierBarFillRange: {x: 0.2, y: 0.6}
+      multiplierBarAnimationSpeeds: 0.3
+      multiplierBarColor: {r: 1, g: 0, b: 0, a: 1}
+    - multiplierBarFillRange: {x: 0.3, y: 0.8}
+      multiplierBarAnimationSpeeds: 0.2
+      multiplierBarColor: {r: 1, g: 0, b: 0.742784, a: 1}
+    - multiplierBarFillRange: {x: 0.5, y: 1}
+      multiplierBarAnimationSpeeds: 0.5
+      multiplierBarColor: {r: 0, g: 0.20631075, b: 1, a: 1}
+    initialFillAmount: 0
+    healthBarAnimationDuration: 1
+    multiplierBarImage: {fileID: 1977935440}
+    multiplierBarText: {fileID: 422725690}
+    animationCoolDownDuration: 2
+  mainCoinClickFunction: {fileID: 86086879}
 --- !u!1 &193333508
 GameObject:
   m_ObjectHideFlags: 0

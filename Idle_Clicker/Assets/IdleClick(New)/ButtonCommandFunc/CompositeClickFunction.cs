@@ -68,7 +68,7 @@ namespace IdleClicker
                     currentThresholdIndex = i;
                    
                     thresholdFound = true;
-                    break;
+                  
                 }
             }
 
