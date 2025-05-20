@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Networking;
 
-namespace IdleClicker
+namespace IdleClicker.AM
 {
     [CreateAssetMenu(fileName = "LeaderShipManagerSO", menuName = "IdleClicker/LeaderShipManagerSO")]
     public class LeaderShipManagerSO : ScriptableObject, IButtonCommand
