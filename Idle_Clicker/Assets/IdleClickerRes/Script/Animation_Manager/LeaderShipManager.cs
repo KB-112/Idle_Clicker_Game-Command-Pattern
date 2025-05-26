@@ -148,6 +148,8 @@ namespace IdleClicker.AM
                 {
                     Debug.Log("Score submitted successfully! Response: " + www.downloadHandler.text);
                     onComplete?.Invoke(true);
+
+                  
                 }
             }
         }
@@ -195,7 +197,7 @@ namespace IdleClicker.AM
                     // Parse the JSON array of leaderboard entries
                     try
                     {
-                        // Unity JsonUtility can't parse arrays directly, so wrap the array into an object
+                       
                         string wrappedJson = "{\"entries\":" + json + "}";
                         LeaderboardResponse response = JsonUtility.FromJson<LeaderboardResponse>(wrappedJson);
 

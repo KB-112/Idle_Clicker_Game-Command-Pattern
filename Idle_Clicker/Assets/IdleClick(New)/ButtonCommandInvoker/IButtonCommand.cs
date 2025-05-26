@@ -8,7 +8,11 @@ namespace IdleClicker
     public interface IButtonCommander
     {
          void StoreButtonListenerCommand();
-       
+
     }
+
+   
+   
+
 
 }

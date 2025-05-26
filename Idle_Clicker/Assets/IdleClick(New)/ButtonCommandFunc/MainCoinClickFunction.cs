@@ -1,95 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using System.Linq;
+
+using System;
+
 
 namespace IdleClicker
 {
     public class MainCoinClickFunction : MonoBehaviour
     {
-        [SerializeField] CoinFuncConfig coinFuncConfig;
-       public int loopCount=1;
-        public int rangeCount;
-        [SerializeField] private int hit;
-
-
-
-        private void Start()
+      
+        public void MainCoinFunc(CoinFuncConfig coinFuncConfig)
         {
-            loopCount = 1;
+            coinFuncConfig.hitCount++;
+            Debug.Log($"Hit increment {coinFuncConfig.hitCount}");
+            MainCoinClickThresholdManager(coinFuncConfig);
         }
-        private void Update()
+
+        void MainCoinClickThresholdManager(CoinFuncConfig coinFuncConfig)
         {
-            if (Input.GetMouseButtonDown(0))
+            for (int i = 0; i < coinFuncConfig.clickThresholds.Length - 1; i++)
             {
-                hit++;
-                ClickThresholdManager();
-            }
-           
+                ResetLoopCount(coinFuncConfig);
 
-
-
-        }
-        public void ClickThresholdManager()
-        {
-            var c = coinFuncConfig;
-            for (int i = 0; i < c.clickThresholds.Length-1; i++)
-            {
-                ResetLoopCount();
-                if ( hit == c.clickThresholds[i].y   )
+                if (coinFuncConfig.hitCount == coinFuncConfig.clickThresholds[i].y)
                 {
-                    rangeCount ++;
-                    
-               
-
+                    coinFuncConfig.rangeIndex++;
                 }
             }
         }
 
+        void ResetLoopCount(CoinFuncConfig coinFuncConfig)
+        {
+            if (coinFuncConfig.hitCount > coinFuncConfig.clickThresholds[^1].y)
+            {
+                coinFuncConfig.hitCount = 0;
+                coinFuncConfig.loopCount++;
+                coinFuncConfig.rangeIndex = 0;
+            }
+
+            if (coinFuncConfig.loopCount > coinFuncConfig.clickThresholds.Length)
+            {
+                coinFuncConfig.loopCount = 1;
+            }
+        }
+
        
-    public   void  ResetLoopCount( )
-        {
-          
-            if (hit > coinFuncConfig.clickThresholds[^1].y )
-            {
-             //   Debug.Log(coinFucConfig.clickThresholds[^1].y);
-                hit = 0;
-                loopCount++;
-                rangeCount = 0;
 
-            }
-            if (loopCount > coinFuncConfig.clickThresholds.Length )
-
-            {
-                loopCount = 1;
-            }
-          
-        }
-
-
-        public void ResetValues()
-        {
-            hit = 0;
-          
-            rangeCount = 0;
-            loopCount = 1;
-        }
        
 
 
 
     }
-
-    [System.Serializable]
-    public class CoinFuncConfig
-    {
-        public Vector2Int[] clickThresholds;
-       
-    }
-
-
-
-
 }
+
+
