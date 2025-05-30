@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace IdleClicker
 {
-    [CreateAssetMenu(fileName = "StatCont", menuName = "ContainerList/StatCont", order = 2)]
+    [CreateAssetMenu(fileName = "SOCont", menuName = "ContainerList/StatCont", order = 2)]
     public class StatHolder : ScriptableObject
     {
         public string buttonName;

@@ -64,7 +64,7 @@ namespace IdleClicker
             }
             else
             {
-                Debug.LogWarning($"Bounce config not found for: {name}");
+                Debug.LogWarning($"Slide config not found for: {name}");
             }
         }
     }

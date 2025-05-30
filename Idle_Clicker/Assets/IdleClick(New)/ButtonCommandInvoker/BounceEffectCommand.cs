@@ -6,12 +6,13 @@ using UnityEngine.UI;
 
 namespace IdleClicker
 {
-    public class BounceEffectCommand : IButtonCommander
+    public class BounceEffectCommand : IButtonCommander 
     {
         private BounceEffectFunction bounceEffect;
         private List<BouncyEffectData> bounceEffectConfigs;
         private List<Button> playerButtons;
 
+       
         public BounceEffectCommand(List<BouncyEffectData> bounceEffectConfigs, BounceEffectFunction bounceEffect, List<Button> playerButtons)
         {
             this.bounceEffectConfigs = bounceEffectConfigs;

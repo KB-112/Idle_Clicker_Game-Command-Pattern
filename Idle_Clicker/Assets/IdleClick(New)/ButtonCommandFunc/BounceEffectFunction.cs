@@ -11,15 +11,16 @@ namespace IdleClicker
 {
     public class BounceEffectFunction : MonoBehaviour
     {
-
+        public DebuggerName debuggerName;
 
         public void BouncyEffect(string buttonName,List<Button> buttonList,RectTransform targetTransform, bool isAnimating, Vector3 orgScale,Vector3 newScale,float scaleDuration, Action onComplete)
         { 
             
             if(buttonList.Any(n => n.name ==  buttonName))
             {
-
-
+                
+                //debuggerName.bounceDebuggerCommand = () => Debug.Log("Debug,Test");
+                //debuggerName.StoreDebuggerCommand(DebuggerNameList.BOUNCE_DEBUGGER);
                 if (isAnimating || targetTransform == null)
                 {
                     onComplete?.Invoke();

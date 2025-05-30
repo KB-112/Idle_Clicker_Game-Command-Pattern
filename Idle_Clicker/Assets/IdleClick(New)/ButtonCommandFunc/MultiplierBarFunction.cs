@@ -136,6 +136,7 @@ namespace IdleClicker
     [System.Serializable]
     public class MultiplierBarManager
     {
+        public string name;
         public List<MultiplierBarConfig> multiplierBars;
 
         [Header("Initializer")]
