@@ -53,9 +53,13 @@ namespace IdleClicker
 
         public void RunButtonCommand(string name, List<Button> buttonList)
         {
-            Debug.Log("Running Coin Shower effect for: " + name);
+          //  Debug.Log("Multiplier Command Excute Success Button Name: " + name);
 
-            var data = multiplierBarFunction.name == name ? multiplierBarManager : null;
+            var data = multiplierBarManager.name == name ? multiplierBarManager : null;
+
+           // Debug.Log($" multiplierBarManager.name Value : {multiplierBarManager.name}");
+
+          //  Debug.Log($"data Value : {data}");
 
             if (data != null && multiplierBarFunction != null)
             {
@@ -63,7 +67,7 @@ namespace IdleClicker
             }
             else
             {
-                Debug.LogWarning($"Coin Shower effect not found for: {name}");
+                Debug.LogWarning($"Multiplier Command Excute Failed Button Name: {name}");
             }
         }
     }

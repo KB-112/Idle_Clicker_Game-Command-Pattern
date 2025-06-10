@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,83 +9,69 @@ namespace IdleClicker
     [CreateAssetMenu(fileName = "ApiCont", menuName = "ContainerList/APICont", order = 1)]
     public class ApiHolder : ScriptableObject
     {
-        public const string apiURL = "https://6824498265ba05803399a0a2.mockapi.io/api/v1/";
-        public const int timeOut = 10;
-        public delegate void  StatementList(string statement);
-        StatementList statementList;
-     
-        public DebuggerName apiDebuggerName;
-        public enum ApiType
+        public OnSuccess onSuccess;
+        public OnFailure onFailure;
+
+        public void CheckStatusReq(UnityWebRequest req)
         {
-           PUT,
-           GET,
-           POST
-            
-        };
-
-        public enum ReqType
-        { 
-            User_Name 
-        
-        };
-
-
-        public ApiType apiType;
-        public ReqType urlReqType;
-
-        public void CreateReq( string apiMethod, string jsonData, string reqType)
-        {
-           
-
-         
-
-            if(!string.IsNullOrEmpty(apiMethod) || !string.IsNullOrEmpty(jsonData) || !string.IsNullOrEmpty(reqType))
+            if (req.result == UnityWebRequest.Result.Success)
             {
+                try
+                {
+                    // Deserialize into the wrapper class
+                    TemplateListWrapper wrapper = JsonUtility.FromJson<TemplateListWrapper>(req.downloadHandler.text);
 
-                DebugRecorder($"  Null request Paramter Passed ");
+                    if (wrapper != null && wrapper.template != null)
+                    {
+                        onSuccess.template = wrapper.template;
+                        onSuccess.template.AddRange(wrapper.template);
+                        foreach (var t in onSuccess.template)
+                        {
+                            Debug.Log($"Player id: {t.id}, Name: {t.Name}, Status: {t.status}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Parsed wrapper or template list is null.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Deserialization failed: {e.Message}");
+                }
             }
             else
             {
-                urlReqType = ReqType.User_Name;
-                reqType = urlReqType.ToString();
-                string url = apiURL + reqType;
-                UnityWebRequest unityWebRequest = new UnityWebRequest(url, apiMethod);
-                unityWebRequest.SetRequestHeader("Content-Type", "application/json");
-
-                DebugRecorder($" ");
+                onFailure.error.Add($"Request failed: {req.error}");
+                
+               
             }
         }
+    }
 
-        void SelectReqType(ReqType urlReqType , ApiType apiTypes)
-        {
+    [Serializable]
+    public class Template
+    {
+        public int id;
+        public string Name;
+        public string status;
+    }
 
+    [Serializable]
+    public class TemplateListWrapper
+    {
+        public List<Template> template;
+    }
 
+    [Serializable]
+    public class OnSuccess
+    {
+        public List<Template> template;
+    }
 
-
-            
-        }
-
-
-
-
-        void DebugRecorder(string statement)
-        {
-            Debug.Log( statement);
-        }
-
-
-
-       
-
-        public void StoreDebuggerCommand(List<string> debuggerList)
-        {
-
-            if(debuggerList.Contains(apiDebuggerName.ToString()))
-            {
-                statementList = DebugRecorder;
-            }
-
-           
-        }
+    [Serializable]
+    public class OnFailure
+    {
+        public List<string> error;
     }
 }

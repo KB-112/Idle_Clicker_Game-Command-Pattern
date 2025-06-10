@@ -39,5 +39,14 @@ namespace IdleClicker
                 });
             }
         }
+
+
+        public void ContiniousBounceEffect(string buttonName, List<GameObject> buttonList, RectTransform targetTransform, Vector3 orgScale, Vector3 newScale, float scaleDuration, Action onComplete)
+        {
+            Sequence seq = DOTween.Sequence();
+            seq.Append(targetTransform.DOScale(newScale, scaleDuration / 2).SetEase(Ease.OutQuad));
+            seq.Append(targetTransform.DOScale(orgScale, scaleDuration / 2).SetEase(Ease.InQuad));
+            seq.SetLoops(-1);
+        }
     }
 }

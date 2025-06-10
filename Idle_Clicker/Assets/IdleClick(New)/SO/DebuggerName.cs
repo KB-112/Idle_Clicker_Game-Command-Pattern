@@ -1,37 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace IdleClicker
 {
-    [CreateAssetMenu(fileName = "DebugCont", menuName = "ContainerList/DebuggerNameCont", order = 1)]
-    public class DebuggerName : ScriptableObject,IDebugger
+    [CreateAssetMenu(fileName = "DebuggerProfile", menuName = "ContainerList/Debugger Profile", order = 1)]
+    public class DebuggerName : ScriptableObject, IDebugger
     {
-        public DebuggerNameList manualDebuggerAssigned;
+        [Header("Assigned Debugger Flags")]
+        public DebuggerNameList manualDebuggerAssigned = DebuggerNameList.NONE;
         public delegate void DebugCommand();
-        public DebugCommand apiDebuggerCommand,bounceDebuggerCommand;
-      
 
-        public void StoreDebuggerCommand(DebuggerNameList inputType )
+        [Header("Assigned Debugger Commands")]
+        public DebugCommand apiDebuggerCommand;
+        public DebugCommand bounceDebuggerCommand;
+
+        public void RunDebuggerCommand(DebuggerNameList inputType)
         {
-            if (manualDebuggerAssigned == inputType)
+            // Skip if there is no debugger assigned
+            if (inputType == DebuggerNameList.NONE)
             {
-                if((inputType & DebuggerNameList.API_DEBUGGER)!=0)
+                Debug.Log("No debugger input received.");
+                return;
+            }
+
+            // Only respond to matching flags
+            if ((manualDebuggerAssigned & inputType) != 0)
+            {
+                if ((inputType & DebuggerNameList.API_DEBUGGER) != 0)
                 {
                     apiDebuggerCommand?.Invoke();
-
                 }
+
                 if ((inputType & DebuggerNameList.BOUNCE_DEBUGGER) != 0)
                 {
                     bounceDebuggerCommand?.Invoke();
-
                 }
-                if ((inputType & DebuggerNameList.NONE) == 0)
-                {
-                    Debug.Log("No debugger assigned.");
-                }
-               
+            }
+            else
+            {
+                Debug.LogWarning($"Debugger [{name}] does not match requested flags: {inputType}");
             }
         }
     }
+
 }

@@ -27,6 +27,11 @@ namespace IdleClicker
         public StatHolder statHolder;
         public TextMeshProUGUI statText;
         public bool isStatOpen =false;
+        public GameObject tapToPlayObj;
+        public Button tapToPlay;
+        bool isTapped = false;
+        public GameObject totalCoinObj;
+      
        
         void StatUpdate()
         {
@@ -42,11 +47,21 @@ namespace IdleClicker
 
         private void Start()
         {
+            tapToPlayObj.SetActive(true);
+            totalCoinObj.SetActive(false);
             tempButton.onClick.AddListener(OnClickIncr);
             statButton.onClick.AddListener(() => StopIncr (true));
             closePanelButton.onClick.AddListener( () => StopIncr (false));
+            tapToPlay.onClick.AddListener(SelfIncrState);
         }
 
+        void SelfIncrState()
+        {
+            isTapped = true;
+            tapToPlayObj.SetActive (false);
+            totalCoinObj.SetActive (true);
+         
+        }
 
         void StopIncr(bool stat)
         {
@@ -60,7 +75,7 @@ namespace IdleClicker
             
            
 
-            if (!isIdleEarningStarted && Time.time - lastClickTime >= cooldownDuration && !isIdleEarningStarted )
+            if (!isIdleEarningStarted && Time.time - lastClickTime >= cooldownDuration && !isIdleEarningStarted &&isTapped )
             {
                 StartIdleEarning();
             }
@@ -105,6 +120,7 @@ namespace IdleClicker
             {
                 isNonClickEarner = false;
                 isIdleEarningStarted = false;
+              
                 StopAllCoroutines();
             }
 

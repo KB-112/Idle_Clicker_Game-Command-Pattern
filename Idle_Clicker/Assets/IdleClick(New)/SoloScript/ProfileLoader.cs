@@ -11,22 +11,11 @@ namespace IdleClicker
     public class ProfileLoader : MonoBehaviour
     {
         public int profileSize;
-        public RawImage profileImage;
-        public Button profileButton;
+        public RawImage profileImage;   
         public TextMeshProUGUI playerName;
-
-        public Button goButton;
-        public List<GameObject> menuHandling;
-        public Image fadeBg;
-        public float timeElapsed;
-        public float duration = 1f;
-        public float lerpValue =1f;
-        Vector4 fadeAlpha ;
-
-
-
         private string imgName = "IdleClicker";
         private string savedImageKey = "ProfileImagePath";
+        public Button profileButton;
 
         void Start()
         {
@@ -34,47 +23,23 @@ namespace IdleClicker
             {
                 Debug.LogError("Profile Image is not assigned!");
             }
-            fadeAlpha = fadeBg.color;
+           
 
-            goButton.onClick.AddListener(AfterClickOnGoButton);
+        
             Init();
+            profileButton.onClick.AddListener(() => PickImage(profileSize));
         }
 
 
        
-        IEnumerator FadeInit()
-        {
-            while (lerpValue != 0)
-            {
-                if (timeElapsed < duration)
-                {
-                    float t = timeElapsed / duration;
-                    lerpValue = Mathf.Lerp(1, 0, t);
-                    timeElapsed += Time.deltaTime;
-                }
-                else
-                {
-                    lerpValue = 0f;
-                }
+     
 
-                fadeAlpha.w = lerpValue;
-                fadeBg.color = fadeAlpha;
-
-                yield return null;
-                Debug.Log("Next Process");
-            }
-        }
-
-        void AfterClickOnGoButton()
-        {
-         
-            StartCoroutine(FadeInit());
-        }
+      
 
       
         void Init()
         {
-            profileButton.onClick.AddListener(() => PickImage(profileSize));
+           
 
             // Load saved image if it exists
             string savedPath = PlayerPrefs.GetString(savedImageKey, string.Empty);

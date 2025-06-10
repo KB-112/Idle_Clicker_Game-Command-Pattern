@@ -50,7 +50,7 @@ namespace IdleClicker
         {
             if (multiplierBarManager == null && coinFuncConfig == null)
             {
-              //  Debug.Log("Multiplier Null Reference ");
+                Debug.Log("Multiplier Null Reference ");
                 return;
             }
             else

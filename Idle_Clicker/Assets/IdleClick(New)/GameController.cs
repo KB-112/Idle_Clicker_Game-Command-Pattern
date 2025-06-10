@@ -16,10 +16,12 @@ namespace IdleClicker
 
         [Header("Player Buttons")]
         [SerializeField] private List<Button> buttonsAvailableToPlayer;
+        [SerializeField] private List<GameObject> nonClickableButton;
 
         [Header("Effect Configs")]
         [SerializeField] private List<BouncyEffectData> bounceEffectConfigs;
         [SerializeField] private List<SlideEffectConfig> slideEffectConfigs;
+
 
         [Header("Main Coin Configs")]
         [SerializeField] private CoinFuncConfig coinFuncConfig;
@@ -31,12 +33,15 @@ namespace IdleClicker
         [Header("Animation Config")]
         [SerializeField] private LuffyAnimationConfig luffyAnimationConfig;
 
+
+
         private BounceEffectFunction bounceEffectFunction;
         private SlidingEffectFunction slidingEffectFunction;
         private MainCoinClickFunction mainCoinClickFunction;
         private MultiplierBarFunction multiplierBarFunction;
         private CoinShowerFunction coinShowerFunction;
         private CharacterAnimationFunction characterAnimationFunction;
+
 
         private void Awake()
         {
@@ -52,9 +57,19 @@ namespace IdleClicker
         private void Start()
         {
             InitializeFunctionValue();
-            InitializeGameCommandOnClick();
-        }
 
+            InitializeGameCommandOnClick();
+            IntializeContBounceEffect();
+        }
+        void IntializeContBounceEffect()
+        {
+            if (bounceEffectConfigs != null && bounceEffectConfigs.Count > 0)
+            {
+                var command = new ContBounceEffectCommand(bounceEffectConfigs, bounceEffectFunction, nonClickableButton);
+                command.StoreButtonListenerCommand();
+                buttonCommands.Add(command);
+            }
+        }
 
         void InitializeFunctionValue()
         {
@@ -98,9 +113,14 @@ namespace IdleClicker
             // Multiplier Command
             if (multiplierBarManager != null && multiplierBarFunction != null)
             {
+                
                 var command = new MultiplierCommand(coinFuncConfig, multiplierBarManager, multiplierBarFunction, buttonsAvailableToPlayer);
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
+            }
+            else if(multiplierBarManager == null && multiplierBarFunction == null)
+            {
+                Debug.Log("NULL Value Passed ");
             }
 
             // Coin Shower Command
