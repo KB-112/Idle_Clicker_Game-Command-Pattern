@@ -42,9 +42,8 @@ namespace IdleClicker
                 fadeColor.w = 0f;
                 ApplyPostFadeState();
 
-                foreach (GameObject group in menuGroupsToHideOnLoad)
-                    group.SetActive(false);
 
+                HideGroups();
                 profileImage.localScale = profileTargetScale;
                 profileImage.localPosition = profileTargetPosition;
                 profileParticle.Stop();
@@ -53,6 +52,12 @@ namespace IdleClicker
             {
                 fadeColor = backgroundFadeImage.color;
             }
+        }
+
+        void HideGroups()
+        {
+            foreach (GameObject group in menuGroupsToHideOnLoad)
+                group.SetActive(false);
         }
 
         private void OnEnable()
@@ -72,6 +77,7 @@ namespace IdleClicker
 
         private void HandleConfirmButtonClick()
         {
+
             AnimateElementsDownward();
             AnimateProfileImage();
             StartCoroutine(FadeOutBackground());
@@ -104,6 +110,7 @@ namespace IdleClicker
                     fadeLerpValue = 0f;
                     profileParticle.Stop();
                     ApplyPostFadeState();
+                    HideGroups();
                 }
 
                 fadeColor.w = fadeLerpValue;
