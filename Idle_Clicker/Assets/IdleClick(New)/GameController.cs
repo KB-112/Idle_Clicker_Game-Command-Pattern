@@ -33,7 +33,10 @@ namespace IdleClicker
         [Header("Animation Config")]
         [SerializeField] private LuffyAnimationConfig luffyAnimationConfig;
 
-
+        [SerializeField]private StatInputConfig statInputConfig;
+        [SerializeField] private ShopInputConfig shopInputConfig;
+        [SerializeField] private PanelSwitcherConfig panelSwitcherConfig;
+        [SerializeField] private RankConfig rankConfig;
 
         private BounceEffectFunction bounceEffectFunction;
         private SlidingEffectFunction slidingEffectFunction;
@@ -41,6 +44,9 @@ namespace IdleClicker
         private MultiplierBarFunction multiplierBarFunction;
         private CoinShowerFunction coinShowerFunction;
         private CharacterAnimationFunction characterAnimationFunction;
+        private StatHolderFunction statHolderFunction;
+        private PanelSwitcherFunction panelSwitcherFunction;
+        private RankFunction rankFunction;
 
 
         private void Awake()
@@ -51,6 +57,9 @@ namespace IdleClicker
             multiplierBarFunction = GetComponent<MultiplierBarFunction>();
             coinShowerFunction = GetComponent<CoinShowerFunction>();
             characterAnimationFunction = GetComponent<CharacterAnimationFunction>();
+            statHolderFunction = GetComponent<StatHolderFunction>();
+            panelSwitcherFunction = GetComponent<PanelSwitcherFunction>();
+            rankFunction = GetComponent<RankFunction>();
         }
 
 
@@ -138,6 +147,29 @@ namespace IdleClicker
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
             }
+
+
+            if(slideEffectConfigs !=null &&shopInputConfig !=null )
+            {
+                var command = new StatHolderCommand(statInputConfig,shopInputConfig,statHolderFunction,buttonsAvailableToPlayer);
+                command.StoreButtonListenerCommand();
+                buttonCommands.Add(command);
+
+            }
+
+            if(panelSwitcherConfig !=null )
+            {
+                var command = new PanelSwitcherCommand(panelSwitcherFunction,panelSwitcherConfig,buttonsAvailableToPlayer);
+                command.StoreButtonListenerCommand();
+                buttonCommands.Add(command);
+            }
+            if(rankConfig !=null)
+            {
+                var command = new RankCommand(rankFunction,rankConfig ,buttonsAvailableToPlayer);
+                command.StoreButtonListenerCommand();
+                buttonCommands.Add(command);
+            }
+
         }
     }
 }

@@ -17,7 +17,12 @@ namespace IdleClicker
 
             if (buttonList.Any(n => n.name == buttonName))
             {
-                panel.SetActive(isActive);
+                if(isActive)
+                {
+                    panel.SetActive(isActive);
+
+                }
+               
 
                 if (rectTransform == null)
                 {
@@ -34,13 +39,23 @@ namespace IdleClicker
                 Debug.Log($"Button Registered for Panel, Panel status: {isActive}");
 
                 float targetY = originalPosition.Value.y + distanceCover;
+                if (!isActive)
+                {
+                    Sequence slideSequence = DOTween.Sequence();
+                    slideSequence.Insert(slidingSpeed - 0.5f,
+                        DOVirtual.DelayedCall(0f, () => panel.SetActive(false)));
+                }
+
+
 
                 rectTransform.DOAnchorPos3DY(targetY, slidingSpeed, snap)
                              .SetLoops(1, LoopType.Yoyo)
                              .OnComplete(() =>
                              {
                                  onComplete?.Invoke();
+                                
                              });
+               
             }
         }
     }

@@ -69,7 +69,7 @@ namespace IdleClicker
         }
         private void Update()
         {
-            StatUpdate();
+            //StatUpdate();
             
                 UpdateUI();
             

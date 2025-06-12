@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using Newtonsoft.Json;
 
 namespace IdleClicker
 {
@@ -14,26 +15,33 @@ namespace IdleClicker
 
         public void CheckStatusReq(UnityWebRequest req)
         {
+            if (onSuccess.template == null)
+                onSuccess.template = new List<Template>();
+            if (onFailure.error == null)
+                onFailure.error = new List<string>();
+
             if (req.result == UnityWebRequest.Result.Success)
             {
+                string json = req.downloadHandler.text;
+                Debug.Log(json);
                 try
                 {
+               
                     // Deserialize into the wrapper class
-                    TemplateListWrapper wrapper = JsonUtility.FromJson<TemplateListWrapper>(req.downloadHandler.text);
+                    List<Template> template = JsonConvert.DeserializeObject<List<Template>>(json);
 
-                    if (wrapper != null && wrapper.template != null)
+
+
+                    if (template.Count > 0)
                     {
-                        onSuccess.template = wrapper.template;
-                        onSuccess.template.AddRange(wrapper.template);
-                        foreach (var t in onSuccess.template)
-                        {
-                            Debug.Log($"Player id: {t.id}, Name: {t.Name}, Status: {t.status}");
-                        }
+                        onSuccess.template.AddRange(template);
+                        Debug.Log($"onSuccess.template now has {onSuccess.template.Count} total item(s)");
                     }
                     else
                     {
-                        Debug.LogWarning("Parsed wrapper or template list is null.");
+                        Debug.LogWarning("No items found in 'template' field.");
                     }
+                   
                 }
                 catch (Exception e)
                 {
@@ -42,34 +50,35 @@ namespace IdleClicker
             }
             else
             {
+                if (onFailure.error == null)
+                {
+                    onFailure.error = new List<string>();
+                }
+
                 onFailure.error.Add($"Request failed: {req.error}");
-                
-               
             }
         }
     }
 
-    [Serializable]
+    [System.Serializable]
     public class Template
     {
+        public string User_Name;
+        public int score;
         public int id;
-        public string Name;
-        public string status;
+       
+     
     }
 
-    [Serializable]
-    public class TemplateListWrapper
-    {
-        public List<Template> template;
-    }
+   
 
-    [Serializable]
+    [System.Serializable]
     public class OnSuccess
     {
         public List<Template> template;
     }
 
-    [Serializable]
+    [System.Serializable]
     public class OnFailure
     {
         public List<string> error;

@@ -60,12 +60,15 @@ namespace IdleClicker
         private void SubmitName(string userName)
         {
             OnNameEntered?.Invoke();
+            string savedName = PlayerPrefs.GetString("User_Input");
+            if (string.IsNullOrEmpty(savedName))
+            {
+                string jsonPayload = $"{{\"User_Name\":\"{userName}\"}}";
+                apiExecutor.ExecuteCommand(new PostCommand(), "https://6824498265ba05803399a0a2.mockapi.io/api/v1/User_Name", jsonPayload);
 
-            string jsonPayload = $"{{\"User_Name\":\"{userName}\"}}";
-            apiExecutor.ExecuteCommand(new PostCommand(), "https://6824498265ba05803399a0a2.mockapi.io/api/v1/User_Name", jsonPayload);
-
-            PlayerPrefs.SetString("User_Input", userName);
-            PlayerPrefs.Save();
+                PlayerPrefs.SetString("User_Input", userName);
+                PlayerPrefs.Save();
+            }
         }
     }
 }
