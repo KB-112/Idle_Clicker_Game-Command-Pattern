@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+
 namespace IdleClicker
 {
   
@@ -25,25 +26,26 @@ namespace IdleClicker
                 bool match = go.name.Split('_')[0] == statusStr;
                 go.SetActive(match);
             }
-            if(statusStr == "Stat")
-            {
-                panel.scrollRect.vertical = false;
-                panel.verticalLayoutGroup.padding.top = 883;
-            }
             
-            else
+             if (statusStr == "Rank")
             {
-                if (statusStr == "Rank")
-                {
-                    panel.verticalLayoutGroup.padding.right = -100;
-                    panel.verticalLayoutGroup.padding.top = 200;
-                    panel.verticalLayoutGroup.padding.bottom = panel.apiHolder.onSuccess.template.Count * 148;
-                    panel.scrollRect.verticalNormalizedPosition = 1f;
-                }
+                panel.scrollRect.content = panelSwitcherConfig.verticalLayoutGroup[0].GetComponent<RectTransform>();
 
-                panel.scrollRect.movementType = ScrollRect.MovementType.Clamped;
+                panel.verticalLayoutGroup[0].padding.top = 120;
+              
+                panel.scrollRect.verticalNormalizedPosition = 1f;
+               
+
             }
+            else if (statusStr == "Shop")
+            {
+                panel.scrollRect.content = panelSwitcherConfig.verticalLayoutGroup[1].GetComponent<RectTransform>();
+                panel.verticalLayoutGroup[1].padding.top = 200;
+                panel.scrollRect.verticalNormalizedPosition = 1f;
+               
 
+            }
+         
 
         }
     }
@@ -58,7 +60,7 @@ namespace IdleClicker
         public List<GameObject> panelOption;
         public ScrollRect scrollRect;
         
-        public VerticalLayoutGroup verticalLayoutGroup;
+        public List<VerticalLayoutGroup> verticalLayoutGroup;
         public ApiHolder apiHolder;
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 namespace IdleClicker
 {
@@ -20,19 +21,28 @@ namespace IdleClicker
            
         }
 
-        IEnumerator FetchLeaderboardDataCoroutine( RankConfig rankConfig)
+        IEnumerator FetchLeaderboardDataCoroutine(RankConfig rankConfig)
         {
+            // Show loading immediately
+            rankConfig.loadingText.text = "Loading...";
+
+            // Clear previous entries early for visual feedback
+            foreach (Transform child in rankConfig.leaderboardParentTransform)
+                Destroy(child.gameObject);
+
             // Execute API request
             rankConfig.apiExecutor.ExecuteCommand(new GetCommand(),
                 "https://6824498265ba05803399a0a2.mockapi.io/api/v1/User_Name", null);
 
-            // Wait until data is fully loaded and available
-            yield return new WaitUntil(() => rankConfig.apiHolder != null &&
-                                            rankConfig.apiHolder.onSuccess != null &&
-                                            rankConfig.apiHolder.onSuccess.template != null &&
-                                            rankConfig.apiHolder.onSuccess.template.Count > 0);
+            // Wait until data is available
+            yield return new WaitUntil(() =>
+                rankConfig.apiHolder != null &&
+                rankConfig.apiHolder.onSuccess != null &&
+                rankConfig.apiHolder.onSuccess.template != null &&
+                rankConfig.apiHolder.onSuccess.template.Count > 0
+            );
 
-            // Populate and sort rank data by score
+            // Populate leaderboard list
             rankConfig.rankList.rankEntries = rankConfig.apiHolder.onSuccess.template
                 .Select(t => new RankEntry
                 {
@@ -43,37 +53,36 @@ namespace IdleClicker
                 .OrderByDescending(entry => entry.playerScore)
                 .ToList();
 
-            // Instantiate leaderboard UI entries
-            for (int i = 0; i < rankConfig.rankList.rankEntries.Count; i++)
+            // Instantiate leaderboard items
+            foreach (var (entry, i) in rankConfig.rankList.rankEntries.Select((e, i) => (e, i)))
             {
-                RankEntry entry = rankConfig.rankList.rankEntries[i];
+                GameObject item = Instantiate(rankConfig.rankEntryPrefab, rankConfig.leaderboardParentTransform);
 
-                GameObject leaderboardItem = Instantiate(rankConfig.rankEntryPrefab, rankConfig.leaderboardParentTransform);
-                RectTransform itemRectTransform = leaderboardItem.GetComponent<RectTransform>();
-                if (itemRectTransform != null)
-                {
-                    itemRectTransform.anchoredPosition = new Vector2(0, -i * rankConfig.entryVerticalSpacing);
-                }
+                var nameText = item.transform.Find("Info_Text")?.GetComponent<TextMeshProUGUI>();
+                if (nameText != null)
+                    nameText.text = $"{i + 1}. {entry.playerName}";
 
-                // Set player name text
-                var nameTextTransform = leaderboardItem.transform.Find("Info_Text");
-                if (nameTextTransform != null)
-                {
-                    var nameText = nameTextTransform.GetComponent<TextMeshProUGUI>();
-                    if (nameText != null)
-                        nameText.text = $"{i + 1}. {entry.playerName}";
-                }
-
-                // Set player score text
-                var scoreTextTransform = leaderboardItem.transform.Find("Score_Text");
-                if (scoreTextTransform != null)
-                {
-                    var scoreText = scoreTextTransform.GetComponent<TextMeshProUGUI>();
-                    if (scoreText != null)
-                        scoreText.text = entry.playerScore.ToString();
-                }
+                var scoreText = item.transform.Find("Score_Text")?.GetComponent<TextMeshProUGUI>();
+                if (scoreText != null)
+                    scoreText.text = entry.playerScore.ToString();
             }
+
+            // Wait one frame and rebuild layout
+            yield return null;
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rankConfig.leaderboardParentTransform.GetComponent<RectTransform>());
+
+            // Scroll to top
+            var scrollRect = rankConfig.leaderboardParentTransform.GetComponentInParent<ScrollRect>();
+            if (scrollRect != null)
+                scrollRect.verticalNormalizedPosition = 1f;
+
+            // Hide loading text
+            rankConfig.loadingText.text = "";
         }
+
+
+
     }
 
     [System.Serializable]
@@ -100,5 +109,6 @@ namespace IdleClicker
         public ApiHolder apiHolder;
         public Transform leaderboardParentTransform;
         public float entryVerticalSpacing = 1000f;
+        public TextMeshProUGUI loadingText;
     }
 }
