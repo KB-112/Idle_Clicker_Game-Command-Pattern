@@ -34,9 +34,10 @@ namespace IdleClicker
         [SerializeField] private LuffyAnimationConfig luffyAnimationConfig;
 
         [SerializeField]private StatInputConfig statInputConfig;
-        [SerializeField] private ShopInputConfig shopInputConfig;
         [SerializeField] private PanelSwitcherConfig panelSwitcherConfig;
         [SerializeField] private RankConfig rankConfig;
+         [SerializeField] private ShopConfig shopConfig;
+       
 
         private BounceEffectFunction bounceEffectFunction;
         private SlidingEffectFunction slidingEffectFunction;
@@ -47,6 +48,7 @@ namespace IdleClicker
         private StatHolderFunction statHolderFunction;
         private PanelSwitcherFunction panelSwitcherFunction;
         private RankFunction rankFunction;
+        private ShopFunction shopFunction;
 
 
         private void Awake()
@@ -60,6 +62,7 @@ namespace IdleClicker
             statHolderFunction = GetComponent<StatHolderFunction>();
             panelSwitcherFunction = GetComponent<PanelSwitcherFunction>();
             rankFunction = GetComponent<RankFunction>();
+            shopFunction = GetComponent<ShopFunction>();
         }
 
 
@@ -84,6 +87,7 @@ namespace IdleClicker
         {
             multiplierBarFunction.IntialValueofMutiplier(multiplierBarManager);
             characterAnimationFunction.InitializeLuffyAnimation(luffyAnimationConfig);
+            shopFunction.Initializer(shopConfig);
 
         }
 
@@ -127,10 +131,7 @@ namespace IdleClicker
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
             }
-            else if(multiplierBarManager == null && multiplierBarFunction == null)
-            {
-                Debug.Log("NULL Value Passed ");
-            }
+          
 
             // Coin Shower Command
             if (particleSystemConfig != null)
@@ -149,9 +150,9 @@ namespace IdleClicker
             }
 
 
-            if(slideEffectConfigs !=null &&shopInputConfig !=null )
+            if(slideEffectConfigs !=null &&shopConfig !=null )
             {
-                var command = new StatHolderCommand(statInputConfig,shopInputConfig,statHolderFunction,buttonsAvailableToPlayer);
+                var command = new StatHolderCommand(statInputConfig,shopConfig,statHolderFunction,buttonsAvailableToPlayer);
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
 
@@ -169,7 +170,12 @@ namespace IdleClicker
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
             }
-
+            if (shopConfig != null)
+            {
+                var command = new ShopCommand(shopFunction, shopConfig, buttonsAvailableToPlayer,shopConfig.totalBalance);
+                command.StoreButtonListenerCommand();
+                buttonCommands.Add(command);
+            }
         }
     }
 }

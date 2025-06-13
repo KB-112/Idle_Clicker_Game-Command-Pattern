@@ -8,10 +8,10 @@ namespace IdleClicker
     public class StatHolderCommand : IButtonCommander
     {
         private StatInputConfig statInputConfig;
-        private ShopInputConfig shopInputConfig;
+        private ShopConfig shopInputConfig;
         private StatHolderFunction statHolderFunction;
         private List<Button> playerButtons;
-        public StatHolderCommand(StatInputConfig statInputConfig , ShopInputConfig shopInputConfig,StatHolderFunction statHolderFunction,List<Button> playerButtons)
+        public StatHolderCommand(StatInputConfig statInputConfig , ShopConfig shopInputConfig,StatHolderFunction statHolderFunction,List<Button> playerButtons)
         {
             this.statInputConfig = statInputConfig;
             this.statHolderFunction = statHolderFunction;
