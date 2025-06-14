@@ -86,9 +86,12 @@ namespace IdleClicker
             InitializeGameCommandOnClick();
             IntializeContBounceEffect();
         }
+        public void Update()
+        {
+          
+        }
 
 
-       
         void IntializeContBounceEffect()
         {
             if (bounceEffectConfigs != null && bounceEffectConfigs.Count > 0)
@@ -105,6 +108,7 @@ namespace IdleClicker
             characterAnimationFunction.InitializeLuffyAnimation(luffyAnimationConfig);
             shopFunction.Initializer(shopConfig);
             nonTapCounterFunction.FetchNonTapCounterFunction(shopConfig,nonTapCounterConfig,mainGameInitConfig,tapCounterConfig);
+            rankFunction.PlayerInfo(rankConfig, tapCounterConfig, tapCounterFunction);
 
         }
 

@@ -10,7 +10,7 @@ namespace IdleClicker
         private MainGameInitConfig mainGameInitConfig;
         private TapCounterConfig tapCounterConfig;
         private NonTapCounterConfig nonTapCounterConfig;
-        private List<Button> buttonAvailableToPlayer;
+        public List<Button> buttonAvailableToPlayer;
 
         public MainGameInitCommand(MainGameInitFunction mainGameInitFunction, MainGameInitConfig mainGameInitConfig, TapCounterConfig tapCounterConfig,
                                                NonTapCounterConfig nonTapCounterConfig, List<Button> buttonAvailableToPlayer)
@@ -34,13 +34,19 @@ namespace IdleClicker
             {
                 string currentButtonName = button.name;
 
+                
+                
                 button.onClick.AddListener(() =>
                 {
-                    mainGameInitFunction.FetchMainGameInitFunction(mainGameInitConfig, nonTapCounterConfig, currentButtonName);
+                    mainGameInitFunction.FetchMainGameInitFunction(mainGameInitConfig, nonTapCounterConfig, currentButtonName,buttonAvailableToPlayer);
                    
                 });
+
+
+                
             }
         }
+
 
     }
 }

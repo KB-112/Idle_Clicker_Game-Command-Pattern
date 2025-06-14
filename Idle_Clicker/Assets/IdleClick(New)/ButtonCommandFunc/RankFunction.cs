@@ -9,8 +9,38 @@ namespace IdleClicker
 {
     public class RankFunction : MonoBehaviour
     {
-       
-       
+
+
+        public void PlayerInfo(RankConfig rankConfig, TapCounterConfig tapCounterConfig, TapCounterFunction tapCounterFunction)
+        {
+            string currentUser = PlayerPrefs.GetString("User_Input");
+            Debug.Log("Checking player info for user input: " + currentUser);
+
+            for (int i = 0; i < rankConfig.rankList.rankEntries.Count; i++)
+            {
+                string entryName = rankConfig.rankList.rankEntries[i].playerName;
+                Debug.Log($"Checking rank entry {i}: PlayerName = {entryName}");
+
+                if (entryName == currentUser)
+                {
+                    Debug.Log("Match found. Creating UserData...");
+
+                    UserData user = new UserData
+                    {
+                        User_Name = entryName,
+                        Score = tapCounterConfig.currentScore,
+                        id = rankConfig.rankList.rankEntries[i].playerId
+                    };
+
+                    Debug.Log($"UserData created: Name = {user.User_Name}, Score = {user.Score}, ID = {user.id}");
+
+                    tapCounterFunction.UserDataStore(user);
+                    Debug.Log("UserData stored successfully.");
+                }
+            }
+
+            Debug.Log("PlayerInfo processing completed.");
+        }
 
         public void FetchRankFunction(RankConfig rankConfig, string buttonAvailableToPlayer)
         {
@@ -110,5 +140,13 @@ namespace IdleClicker
         public Transform leaderboardParentTransform;
         public float entryVerticalSpacing = 1000f;
         public TextMeshProUGUI loadingText;
+    }
+
+    [System.Serializable]
+    public class UserData
+    {
+        public int id;
+        public string User_Name;
+        public int Score;
     }
 }

@@ -601,7 +601,8 @@ GameObject:
   - component: {fileID: 86086886}
   - component: {fileID: 86086885}
   - component: {fileID: 86086887}
-  - component: {fileID: 86086883}
+  - component: {fileID: 86086893}
+  - component: {fileID: 86086894}
   - component: {fileID: 86086876}
   - component: {fileID: 86086877}
   - component: {fileID: 86086879}
@@ -611,9 +612,7 @@ GameObject:
   - component: {fileID: 86086890}
   - component: {fileID: 86086891}
   - component: {fileID: 86086892}
-  - component: {fileID: 86086893}
   - component: {fileID: 86086895}
-  - component: {fileID: 86086894}
   m_Layer: 0
   m_Name: New_Script_Manger
   m_TagString: Untagged
@@ -810,7 +809,7 @@ MonoBehaviour:
     buttonName: Stat_Button
     statInfo: {fileID: 973421108}
     totalBalance: 0
-    previousScoreText: {fileID: 0}
+    previousScoreText: {fileID: 193333510}
   panelSwitcherConfig:
     buttonName:
     - Stat_Button
@@ -869,9 +868,8 @@ MonoBehaviour:
     idleUpgradeCostText: {fileID: 2086010432}
     totalBalance: 1000
   mainGameInitConfig:
-    buttonName:
-    - Tap_To_Play_Button
-    - Coin_Button
+    buttonName: Tap_To_Play_Button
+    buttonName1: Coin_Button
     tapScore: 0
     idleScore: 0
     totalBalance: 0
@@ -881,7 +879,8 @@ MonoBehaviour:
     buttonName: Coin_Button
     tapScore: 0
     currentScore: 0
-    cooldownPeriod: 1
+    cooldownPeriod: 2
+    apiExecutor: {fileID: 86086888}
   nonTapCounterConfig:
     idleScore: 0
     isNonClickEarner: 0
@@ -958,33 +957,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cce43051d5c3f1347a706e2a39c7412f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &86086883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 86086871}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dc29c38406b63245aad357fc177b86a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coinScoreText: {fileID: 193333510}
-  tempButton: {fileID: 1526070310}
-  statButton: {fileID: 60293107}
-  closePanelButton: {fileID: 244528413}
-  shopButton: {fileID: 0}
-  totalCoinEarnWhileTapping: 0
-  totalCoinEarnWhileNotTapping: 0
-  totalBalance: 0
-  cooldownDuration: 1
-  statHolder: {fileID: 11400000, guid: 2aa05a7fb9ad61b4d8dacbb062cb8256, type: 2}
-  statText: {fileID: 0}
-  isStatOpen: 0
-  tapToPlayObj: {fileID: 826962263}
-  tapToPlay: {fileID: 826962265}
-  totalCoinObj: {fileID: 193333508}
 --- !u!114 &86086885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1120,6 +1092,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b6964fdf7f5dbb4c811d792507b3467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _userData:
+    id: 0
+    User_Name: 
+    Score: 0
 --- !u!114 &86086894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3435,7 +3411,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 54.99951}
-  m_SizeDelta: {x: 700, y: -327.46814}
+  m_SizeDelta: {x: 700, y: -327.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &694761834
 MonoBehaviour:
@@ -3828,7 +3804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &748704206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11080,7 +11056,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -11094,7 +11070,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1526070311}
   m_OnClick:
     m_PersistentCalls:
@@ -17439,7 +17415,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1929570820
 MonoBehaviour:
   m_ObjectHideFlags: 0

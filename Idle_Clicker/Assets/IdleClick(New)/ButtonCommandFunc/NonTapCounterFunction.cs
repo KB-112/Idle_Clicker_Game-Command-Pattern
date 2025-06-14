@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using System.Collections;
+using UnityEngine;
 
 namespace IdleClicker
 {
@@ -13,52 +12,48 @@ namespace IdleClicker
         private NonTapCounterConfig nonTapCounterConfig;
         private MainGameInitConfig mainGameInitConfig;
         private TapCounterConfig tapCounterConfig;
-        public static Action<MainGameInitConfig, TapCounterConfig, NonTapCounterConfig> idleCounterStart;
 
+        public static Action<MainGameInitConfig, TapCounterConfig, NonTapCounterConfig> idleCounterStart;
 
         void OnEnable()
         {
-            MainGameInitFunction.onGameStarted += InitiateCounter;
+            MainGameInitFunction.onGameStarted += StopCounter;
             TapCounterFunction.onTapping += StopCounter;
             TapCounterFunction.startIdleCounter += InitiateCounter;
         }
 
         void OnDisable()
         {
-            MainGameInitFunction.onGameStarted -= InitiateCounter;
-           TapCounterFunction.onTapping -= StopCounter;
+            MainGameInitFunction.onGameStarted -= StopCounter;
+            TapCounterFunction.onTapping -= StopCounter;
             TapCounterFunction.startIdleCounter -= InitiateCounter;
         }
 
-      
-        public void FetchNonTapCounterFunction(ShopConfig shopCfg, NonTapCounterConfig nonTapCfg, MainGameInitConfig gameCfg,TapCounterConfig tapCounterConfig)
+        public void FetchNonTapCounterFunction(ShopConfig shopCfg, NonTapCounterConfig nonTapCfg, MainGameInitConfig gameCfg, TapCounterConfig tapCfg)
         {
             shopConfig = shopCfg;
             nonTapCounterConfig = nonTapCfg;
             mainGameInitConfig = gameCfg;
-            this.tapCounterConfig = tapCounterConfig;
+            tapCounterConfig = tapCfg;
         }
 
-        IEnumerator NonClickCoinRoutine()
+        private IEnumerator NonClickCoinRoutine()
         {
             while (nonTapCounterConfig.isNonClickEarner)
             {
-
                 int coinsEarned = shopConfig.idleUpgrades[shopConfig.idleUpgradeLevel].idlePerIncrement;
+
                 nonTapCounterConfig.idleScore += coinsEarned;
-                mainGameInitConfig.totalBalance += coinsEarned; 
+                mainGameInitConfig.totalBalance += coinsEarned;
+
                 idleCounterStart?.Invoke(mainGameInitConfig, tapCounterConfig, nonTapCounterConfig);
 
-                // Debug.Log($"Loop initiate : {shopConfig.idleUpgrades[shopConfig.idleUpgradeLevel].idlePerIncrement}");
-                yield return new WaitForSeconds(1f);
-
-
-               
                 mainGameInitConfig.scoreText.text = nonTapCounterConfig.idleScore.ToString();
+
+                yield return new WaitForSeconds(1f);
             }
         }
 
-       
         public void InitiateCounter()
         {
             if (shopConfig == null || nonTapCounterConfig == null || mainGameInitConfig == null)
@@ -66,9 +61,17 @@ namespace IdleClicker
                 Debug.LogWarning("Configs not set! Make sure FetchNonTapCounterFunction is called before starting.");
                 return;
             }
-           
+
+            if (idleCoroutine != null)
+            {
+                StopCoroutine(idleCoroutine);
+            }
+
+            Debug.Log("Idle Counter Started");
+
             nonTapCounterConfig.idleScore = 0;
-           nonTapCounterConfig.isNonClickEarner = true;
+            nonTapCounterConfig.isNonClickEarner = true;
+
             idleCoroutine = StartCoroutine(NonClickCoinRoutine());
         }
 
@@ -76,22 +79,21 @@ namespace IdleClicker
         {
             if (nonTapCounterConfig != null)
                 nonTapCounterConfig.isNonClickEarner = false;
-            Debug.Log("Idle COunter stop");
+
             if (idleCoroutine != null)
             {
                 StopCoroutine(idleCoroutine);
                 idleCoroutine = null;
             }
+
+            Debug.Log("Idle Counter Stopped");
         }
     }
 
-
-    [System.Serializable]
+    [Serializable]
     public class NonTapCounterConfig
     {
         public int idleScore;
-        public bool isNonClickEarner =false;
-
-
+        public bool isNonClickEarner = false;
     }
 }

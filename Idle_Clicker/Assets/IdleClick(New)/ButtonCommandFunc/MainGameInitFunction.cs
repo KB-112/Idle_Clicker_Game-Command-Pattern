@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 namespace IdleClicker
 {
     public class MainGameInitFunction : MonoBehaviour
@@ -13,28 +14,31 @@ namespace IdleClicker
        
 
         
-      
         public void FetchMainGameInitFunction(MainGameInitConfig config,
-                                               NonTapCounterConfig nonTapCounterConfig, string buttonAvailableToPlayer)
+                                               NonTapCounterConfig nonTapCounterConfig, string buttonAvailableToPlayer , List<Button> newButton)
 
         {
             
-            if (config.buttonName[0] == buttonAvailableToPlayer)
+            if (config.buttonName == buttonAvailableToPlayer )
             {
 
-
-                if (config.tapToPlay)
-                {
+                Debug.Log("Tap to play button Pressed");
+                
                     config.tapToPlay.SetActive(false);
+                   for( int i = 0; i < newButton.Count; i++)
+                    {
+                         if(newButton[i].name == config.buttonName1)
+                        {
+                            newButton[i].interactable = true;
+                        
+                        }
+                    }
+                       
                     config.scoreText.text = 0.ToString();
                     onGameStarted?.Invoke();
-                }
+                
                
-                else
-                {
-                    Debug.LogWarning("Tap to playbutton is not  Active in hierarchy");
-
-                }
+               
 
                 
             }
@@ -45,7 +49,8 @@ namespace IdleClicker
     [System.Serializable]
     public class MainGameInitConfig
     {
-        public List<string> buttonName;
+        public string buttonName;
+        public string buttonName1;
         public int tapScore;
         public int idleScore;
         public int totalBalance;
