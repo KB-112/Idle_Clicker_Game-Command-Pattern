@@ -11,12 +11,14 @@ namespace IdleClicker
         private ShopConfig shopInputConfig;
         private StatHolderFunction statHolderFunction;
         private List<Button> playerButtons;
-        public StatHolderCommand(StatInputConfig statInputConfig , ShopConfig shopInputConfig,StatHolderFunction statHolderFunction,List<Button> playerButtons)
+        private MainGameInitConfig mainGameInitConfig;
+        public StatHolderCommand(StatInputConfig statInputConfig , ShopConfig shopInputConfig,StatHolderFunction statHolderFunction, MainGameInitConfig mainGameInitConfig,List<Button> playerButtons)
         {
             this.statInputConfig = statInputConfig;
             this.statHolderFunction = statHolderFunction;
             this.shopInputConfig= shopInputConfig;
             this.playerButtons = playerButtons;
+            this.mainGameInitConfig = mainGameInitConfig;
         }
 
         public void StoreButtonListenerCommand()
@@ -26,7 +28,7 @@ namespace IdleClicker
                 string currentButtonName = button.name;
 
                 button.onClick.AddListener(() =>
-                { statHolderFunction.StatInfo(statInputConfig, shopInputConfig,currentButtonName); });
+                { statHolderFunction.StatInfo(statInputConfig, shopInputConfig,mainGameInitConfig,currentButtonName); });
             }
         }
         

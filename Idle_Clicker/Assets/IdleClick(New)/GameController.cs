@@ -4,12 +4,16 @@ using UnityEngine.UI;
 
 namespace IdleClicker
 {
-    [RequireComponent(typeof(BounceEffectFunction))]
-    [RequireComponent(typeof(SlidingEffectFunction))]
-    [RequireComponent(typeof(MainCoinClickFunction))]
-    [RequireComponent(typeof(MultiplierBarFunction))]
-    [RequireComponent(typeof(CoinShowerFunction))]
-    [RequireComponent(typeof(CharacterAnimationFunction))]
+    [RequireComponent(typeof(BounceEffectFunction))]  //1
+    [RequireComponent(typeof(SlidingEffectFunction))] //2
+    [RequireComponent(typeof(MainCoinClickFunction))] //3
+    [RequireComponent(typeof(MultiplierBarFunction))] //4
+    [RequireComponent(typeof(CoinShowerFunction))]   //5
+    [RequireComponent(typeof(CharacterAnimationFunction))] //6
+    [RequireComponent(typeof(StatHolderFunction))] //7
+    [RequireComponent(typeof(PanelSwitcherFunction))] //8
+    [RequireComponent(typeof(RankFunction))] //9
+    [RequireComponent(typeof(ShopFunction))] //10
     public class GameController : MonoBehaviour
     {
         private List<IButtonCommander> buttonCommands = new List<IButtonCommander>();
@@ -36,8 +40,12 @@ namespace IdleClicker
         [SerializeField]private StatInputConfig statInputConfig;
         [SerializeField] private PanelSwitcherConfig panelSwitcherConfig;
         [SerializeField] private RankConfig rankConfig;
-         [SerializeField] private ShopConfig shopConfig;
-       
+        [SerializeField] private ShopConfig shopConfig;
+
+        [SerializeField] private MainGameInitConfig mainGameInitConfig;
+        [SerializeField] private TapCounterConfig tapCounterConfig;
+        [SerializeField] private NonTapCounterConfig nonTapCounterConfig;
+
 
         private BounceEffectFunction bounceEffectFunction;
         private SlidingEffectFunction slidingEffectFunction;
@@ -49,7 +57,9 @@ namespace IdleClicker
         private PanelSwitcherFunction panelSwitcherFunction;
         private RankFunction rankFunction;
         private ShopFunction shopFunction;
-
+        private MainGameInitFunction mainGameInitFunction;
+        private TapCounterFunction tapCounterFunction;
+        private NonTapCounterFunction nonTapCounterFunction;
 
         private void Awake()
         {
@@ -63,6 +73,9 @@ namespace IdleClicker
             panelSwitcherFunction = GetComponent<PanelSwitcherFunction>();
             rankFunction = GetComponent<RankFunction>();
             shopFunction = GetComponent<ShopFunction>();
+            mainGameInitFunction = GetComponent<MainGameInitFunction>();
+            tapCounterFunction = GetComponent<TapCounterFunction>();
+            nonTapCounterFunction = GetComponent<NonTapCounterFunction>();
         }
 
 
@@ -73,6 +86,9 @@ namespace IdleClicker
             InitializeGameCommandOnClick();
             IntializeContBounceEffect();
         }
+
+
+       
         void IntializeContBounceEffect()
         {
             if (bounceEffectConfigs != null && bounceEffectConfigs.Count > 0)
@@ -88,6 +104,7 @@ namespace IdleClicker
             multiplierBarFunction.IntialValueofMutiplier(multiplierBarManager);
             characterAnimationFunction.InitializeLuffyAnimation(luffyAnimationConfig);
             shopFunction.Initializer(shopConfig);
+            nonTapCounterFunction.FetchNonTapCounterFunction(shopConfig,nonTapCounterConfig,mainGameInitConfig,tapCounterConfig);
 
         }
 
@@ -152,7 +169,7 @@ namespace IdleClicker
 
             if(slideEffectConfigs !=null &&shopConfig !=null )
             {
-                var command = new StatHolderCommand(statInputConfig,shopConfig,statHolderFunction,buttonsAvailableToPlayer);
+                var command = new StatHolderCommand(statInputConfig,shopConfig,statHolderFunction,mainGameInitConfig,buttonsAvailableToPlayer);
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
 
@@ -176,6 +193,29 @@ namespace IdleClicker
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
             }
+
+            if (mainGameInitConfig!= null && tapCounterConfig !=null && nonTapCounterConfig !=null)
+            {
+                var command = new MainGameInitCommand(mainGameInitFunction,mainGameInitConfig,tapCounterConfig,nonTapCounterConfig,buttonsAvailableToPlayer);
+                command.StoreButtonListenerCommand();
+                buttonCommands.Add(command);
+            }
+
+            
+
+            if(tapCounterConfig !=null)
+            {
+                var command = new TapCounterCommand(mainGameInitConfig,tapCounterFunction ,tapCounterConfig ,buttonsAvailableToPlayer,nonTapCounterConfig,shopConfig);
+                command.StoreButtonListenerCommand();
+                buttonCommands.Add(command);
+            }
+            if (nonTapCounterConfig != null)
+            {
+               // var command = new NonTapCounterCommand(nonTapCounterFunction, shopConfig, nonTapCounterConfig, mainGameInitConfig);
+                //command.StoreButtonListenerCommand();
+
+            }
+
         }
     }
 }

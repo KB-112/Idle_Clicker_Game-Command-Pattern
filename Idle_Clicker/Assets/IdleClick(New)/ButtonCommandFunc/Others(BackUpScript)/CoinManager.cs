@@ -33,17 +33,7 @@ namespace IdleClicker
         public GameObject totalCoinObj;
       
        
-        void StatUpdate()
-        {
-            statText.text =
-     $"<mspace=25>Total    :</mspace> {totalBalance} coins\n" +
-     $"<mspace=25>Current  :</mspace> {(int.TryParse(coinScoreText.text, out int val) ? val : 0)} coins\n" +
-     "<mspace=25>Per Tap  :</mspace> 1 coins\n" +
-     "<mspace=25>Per Idle :</mspace> 1 coins";
-
-
-
-        }
+     
 
         private void Start()
         {

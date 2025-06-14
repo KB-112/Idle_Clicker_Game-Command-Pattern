@@ -596,21 +596,24 @@ GameObject:
   m_Component:
   - component: {fileID: 86086873}
   - component: {fileID: 86086874}
+  - component: {fileID: 86086880}
+  - component: {fileID: 86086882}
+  - component: {fileID: 86086886}
+  - component: {fileID: 86086885}
+  - component: {fileID: 86086887}
+  - component: {fileID: 86086883}
   - component: {fileID: 86086876}
   - component: {fileID: 86086877}
   - component: {fileID: 86086879}
-  - component: {fileID: 86086880}
   - component: {fileID: 86086881}
-  - component: {fileID: 86086882}
-  - component: {fileID: 86086883}
   - component: {fileID: 86086888}
-  - component: {fileID: 86086885}
-  - component: {fileID: 86086886}
-  - component: {fileID: 86086887}
   - component: {fileID: 86086889}
   - component: {fileID: 86086890}
   - component: {fileID: 86086891}
   - component: {fileID: 86086892}
+  - component: {fileID: 86086893}
+  - component: {fileID: 86086895}
+  - component: {fileID: 86086894}
   m_Layer: 0
   m_Name: New_Script_Manger
   m_TagString: Untagged
@@ -807,7 +810,7 @@ MonoBehaviour:
     buttonName: Stat_Button
     statInfo: {fileID: 973421108}
     totalBalance: 0
-    currentScoreText: {fileID: 193333510}
+    previousScoreText: {fileID: 0}
   panelSwitcherConfig:
     buttonName:
     - Stat_Button
@@ -836,8 +839,8 @@ MonoBehaviour:
   shopConfig:
     buttonNameUpgrade1: Upgrade_1_Button
     tapUpgrades:
-    - tapPerIncrement: 2
-      cost: 2
+    - tapPerIncrement: 1
+      cost: 1
     - tapPerIncrement: 3
       cost: 3
     - tapPerIncrement: 4
@@ -849,11 +852,10 @@ MonoBehaviour:
     tapUpgradeLevel: 0
     tapUpgradeText: {fileID: 1607973427}
     tapUpgradeCostText: {fileID: 1342194491}
-    tapUpgradeButton: {fileID: 1133443180}
     buttonNameUpgrade2: Upgrade_2_Button
     idleUpgrades:
-    - idlePerIncrement: 2
-      cost: 2
+    - idlePerIncrement: 1
+      cost: 1
     - idlePerIncrement: 3
       cost: 3
     - idlePerIncrement: 4
@@ -865,8 +867,24 @@ MonoBehaviour:
     idleUpgradeLevel: 0
     idleUpgradeText: {fileID: 1639859313}
     idleUpgradeCostText: {fileID: 2086010432}
-    idleUpgradeButton: {fileID: 714743145}
     totalBalance: 1000
+  mainGameInitConfig:
+    buttonName:
+    - Tap_To_Play_Button
+    - Coin_Button
+    tapScore: 0
+    idleScore: 0
+    totalBalance: 0
+    tapToPlay: {fileID: 826962263}
+    scoreText: {fileID: 193333510}
+  tapCounterConfig:
+    buttonName: Coin_Button
+    tapScore: 0
+    currentScore: 0
+    cooldownPeriod: 1
+  nonTapCounterConfig:
+    idleScore: 0
+    isNonClickEarner: 0
 --- !u!114 &86086876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -947,7 +965,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86086871}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0dc29c38406b63245aad357fc177b86a, type: 3}
   m_Name: 
@@ -1088,6 +1106,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 184088ddeee98374b8d138b8bc9faab4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &86086893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86086871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b6964fdf7f5dbb4c811d792507b3467, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &86086894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86086871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f33021bcd663e5a4da568c8afdd6f2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &86086895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86086871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 596d883dc55682a43a82b0f1d5fe74d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &193007687
@@ -3381,7 +3435,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 54.99951}
-  m_SizeDelta: {x: 700, y: 0}
+  m_SizeDelta: {x: 700, y: -327.46814}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &694761834
 MonoBehaviour:
@@ -3458,9 +3512,9 @@ RectTransform:
   - {fileID: 714743144}
   m_Father: {fileID: 694761833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 350, y: -230}
   m_SizeDelta: {x: 700, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &705364540
@@ -4212,7 +4266,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &875310485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4331,7 +4385,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -10}
-  m_SizeDelta: {x: 100, y: 0}
+  m_SizeDelta: {x: 100, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &896967386
 MonoBehaviour:
@@ -4999,7 +5053,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 0, g: 0, b: 0, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -18360,9 +18414,9 @@ RectTransform:
   - {fileID: 1133443179}
   m_Father: {fileID: 694761833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 350, y: -70}
   m_SizeDelta: {x: 700, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2146762296
