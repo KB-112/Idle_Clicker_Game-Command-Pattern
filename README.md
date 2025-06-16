@@ -75,5 +75,15 @@ This Unity project is a fully functional **Idle Clicker Game** developed with sc
 
 ---
 
+## 📥 Download & Demo
 
+🔗 **Build & Gameplay Video**:  
+[📁 Google Drive – Build & Video Folder](https://drive.google.com/drive/folders/1276_p4APFRM2P_0bIFmUM5XYo7G1vpn4?usp=sharing)
+
+- Includes:
+  - ✅ Latest playable build (.APK)
+  - 🎥 Gameplay walkthrough/demo video
+
+
+---
 
