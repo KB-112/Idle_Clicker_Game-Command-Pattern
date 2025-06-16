@@ -35,6 +35,7 @@ namespace IdleClicker
                     }
                        
                     config.scoreText.text = 0.ToString();
+               
                     onGameStarted?.Invoke();
                 
                
@@ -52,9 +53,8 @@ namespace IdleClicker
         public string buttonName;
         public string buttonName1;
         public int tapScore;
-        public int idleScore;
-        public int totalBalance;
-
+        public int idleScore;    
+        public MainPlayerData playerData;
         public GameObject tapToPlay;
         public TextMeshProUGUI scoreText;
 

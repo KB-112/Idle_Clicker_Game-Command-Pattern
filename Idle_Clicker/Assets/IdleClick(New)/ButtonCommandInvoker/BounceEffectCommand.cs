@@ -35,7 +35,7 @@ namespace IdleClicker
 
         public void RunButtonCommand(string name, List<Button> buttonList)
         {
-            Debug.Log("Running bounce effect for: " + name);
+          //  Debug.Log("Running bounce effect for: " + name);
 
             var data = bounceEffectConfigs.FirstOrDefault(x => x.name == name);
 

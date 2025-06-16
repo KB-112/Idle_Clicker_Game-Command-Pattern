@@ -42,7 +42,7 @@ namespace IdleClicker
 
         public void RunButtonCommand(string name, List<Button> buttonList)
         {
-            Debug.Log("Running Coin Shower effect for: " + name);
+          //  Debug.Log("Running Coin Shower effect for: " + name);
 
             var data = particleSystemConfig.name == name ? particleSystemConfig : null;
 

@@ -13,7 +13,7 @@ namespace IdleClicker
 
         public void SlideEffect(string buttonName, List<Button> buttonList, RectTransform rectTransform, float distanceCover, float slidingSpeed, bool snap, bool isActive, GameObject panel, Action onComplete)
         {
-            Debug.Log("Command calling for Sliding function....");
+           // Debug.Log("Command calling for Sliding function....");
 
             if (buttonList.Any(n => n.name == buttonName))
             {
@@ -36,7 +36,7 @@ namespace IdleClicker
                     originalPosition = rectTransform.anchoredPosition;
                 }
 
-                Debug.Log($"Button Registered for Panel, Panel status: {isActive}");
+             //   Debug.Log($"Button Registered for Panel, Panel status: {isActive}");
 
                 float targetY = originalPosition.Value.y + distanceCover;
                 if (!isActive)

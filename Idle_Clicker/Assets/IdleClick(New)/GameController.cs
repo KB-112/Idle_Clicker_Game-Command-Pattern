@@ -45,6 +45,8 @@ namespace IdleClicker
         [SerializeField] private MainGameInitConfig mainGameInitConfig;
         [SerializeField] private TapCounterConfig tapCounterConfig;
         [SerializeField] private NonTapCounterConfig nonTapCounterConfig;
+        
+      
 
 
         private BounceEffectFunction bounceEffectFunction;
@@ -60,7 +62,7 @@ namespace IdleClicker
         private MainGameInitFunction mainGameInitFunction;
         private TapCounterFunction tapCounterFunction;
         private NonTapCounterFunction nonTapCounterFunction;
-
+       
         private void Awake()
         {
             bounceEffectFunction = GetComponent<BounceEffectFunction>();
@@ -76,22 +78,28 @@ namespace IdleClicker
             mainGameInitFunction = GetComponent<MainGameInitFunction>();
             tapCounterFunction = GetComponent<TapCounterFunction>();
             nonTapCounterFunction = GetComponent<NonTapCounterFunction>();
+          
         }
 
 
         private void Start()
         {
-            InitializeFunctionValue();
-
-            InitializeGameCommandOnClick();
             IntializeContBounceEffect();
-        }
-        public void Update()
-        {
-          
+            InitializeGameCommandOnClick();
+
+            string savedName = PlayerPrefs.GetString("User_Input");
+
+            if (!string.IsNullOrEmpty(savedName))
+            {
+                InitializeFunctionValue();
+
+              
+            }
+           
+
         }
 
-
+       
         void IntializeContBounceEffect()
         {
             if (bounceEffectConfigs != null && bounceEffectConfigs.Count > 0)
@@ -102,14 +110,33 @@ namespace IdleClicker
             }
         }
 
+
+
         void InitializeFunctionValue()
         {
             multiplierBarFunction.IntialValueofMutiplier(multiplierBarManager);
             characterAnimationFunction.InitializeLuffyAnimation(luffyAnimationConfig);
-            shopFunction.Initializer(shopConfig);
-            nonTapCounterFunction.FetchNonTapCounterFunction(shopConfig,nonTapCounterConfig,mainGameInitConfig,tapCounterConfig);
-            rankFunction.PlayerInfo(rankConfig, tapCounterConfig, tapCounterFunction);
+            shopFunction.Initializer(shopConfig, tapCounterFunction);
+           
 
+
+                StartCoroutine(rankFunction.FetchLeaderboardDataCoroutine(rankConfig, tapCounterConfig, tapCounterFunction));
+            RankLoadingDuringInitialPhase();
+          
+
+        }
+
+        void RankLoadingDuringInitialPhase()
+        {
+            string savedName = PlayerPrefs.GetString("User_Input");
+
+            if (rankConfig != null && !string.IsNullOrEmpty(savedName))
+            {
+              //  Debug.Log("Game Controller passing Player Info");
+                rankFunction.FetchRankFunction(rankConfig, tapCounterConfig,tapCounterFunction,"None");
+             
+                
+            }
         }
 
         private void InitializeGameCommandOnClick()
@@ -181,19 +208,19 @@ namespace IdleClicker
 
             if(panelSwitcherConfig !=null )
             {
-                var command = new PanelSwitcherCommand(panelSwitcherFunction,panelSwitcherConfig,buttonsAvailableToPlayer);
+                var command = new PanelSwitcherCommand(panelSwitcherFunction,panelSwitcherConfig,rankConfig,buttonsAvailableToPlayer);
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
             }
             if(rankConfig !=null)
             {
-                var command = new RankCommand(rankFunction,rankConfig ,buttonsAvailableToPlayer);
+                var command = new RankCommand(rankFunction,rankConfig ,tapCounterConfig,tapCounterFunction,buttonsAvailableToPlayer);
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
             }
             if (shopConfig != null)
             {
-                var command = new ShopCommand(shopFunction, shopConfig, buttonsAvailableToPlayer,shopConfig.totalBalance);
+                var command = new ShopCommand(shopFunction, shopConfig, buttonsAvailableToPlayer,tapCounterFunction,mainGameInitConfig);
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);
             }
@@ -215,10 +242,12 @@ namespace IdleClicker
             }
             if (nonTapCounterConfig != null)
             {
-               // var command = new NonTapCounterCommand(nonTapCounterFunction, shopConfig, nonTapCounterConfig, mainGameInitConfig);
-                //command.StoreButtonListenerCommand();
-
+                var command = new NonTapCounterCommand(nonTapCounterFunction, shopConfig, nonTapCounterConfig, mainGameInitConfig,buttonsAvailableToPlayer);
+                command.StoreButtonListenerCommand();
+                buttonCommands.Add(command);
             }
+
+           
 
         }
     }

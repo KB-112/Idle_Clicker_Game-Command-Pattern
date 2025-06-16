@@ -11,7 +11,7 @@ namespace IdleClicker
     public class PanelSwitcherFunction : MonoBehaviour
     {
        
-        public void UpdateDescription(PanelSwitcherConfig panelSwitcherConfig,string buttonAvailableToPlayer)
+        public void UpdateDescription(PanelSwitcherConfig panelSwitcherConfig,RankConfig rankConfig,string buttonAvailableToPlayer)
         {
             var panel = panelSwitcherConfig;
          
@@ -38,16 +38,26 @@ namespace IdleClicker
                 {
                     panel.scrollRect.content = panelSwitcherConfig.verticalLayoutGroup[0].GetComponent<RectTransform>();
 
-                    panel.verticalLayoutGroup[0].padding.top = 120;
+                    if(rankConfig.rankList.rankEntries.Count <=5)
+                    {
+                        panel.verticalLayoutGroup[0].padding.top = 0;
+                        panel.verticalLayoutGroup[0].padding.bottom = 0;
+                    }
+                    else
+                    {
+                        panel.verticalLayoutGroup[0].padding.top = 150;
+                        panel.verticalLayoutGroup[0].padding.bottom = 50;
+                    }
 
-                    panel.scrollRect.verticalNormalizedPosition = 1f;
+
+                        panel.scrollRect.verticalNormalizedPosition = 1f;
 
 
                 }
                 if (statusStr == "Shop")
                 {
                     panel.scrollRect.content = panelSwitcherConfig.verticalLayoutGroup[1].GetComponent<RectTransform>();
-                    panel.verticalLayoutGroup[1].padding.top = 200;
+                    panel.verticalLayoutGroup[1].padding.top = -200;
                     panel.scrollRect.verticalNormalizedPosition = 1f;
 
 
@@ -70,6 +80,7 @@ namespace IdleClicker
         
         public List<VerticalLayoutGroup> verticalLayoutGroup;
         public ApiHolder apiHolder;
+        
 
 
     }

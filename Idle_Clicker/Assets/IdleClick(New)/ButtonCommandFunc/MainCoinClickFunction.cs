@@ -12,7 +12,7 @@ namespace IdleClicker
         public void MainCoinFunc(CoinFuncConfig coinFuncConfig)
         {
             coinFuncConfig.hitCount++;
-            Debug.Log($"Hit increment {coinFuncConfig.hitCount}");
+           // Debug.Log($"Hit increment {coinFuncConfig.hitCount}");
             MainCoinClickThresholdManager(coinFuncConfig);
         }
 

@@ -28,7 +28,7 @@ namespace IdleClicker
                 string currentButtonName = button.name;
 
                 button.onClick.AddListener(() =>
-                { statHolderFunction.StatInfo(statInputConfig, shopInputConfig,mainGameInitConfig,currentButtonName); });
+                { statHolderFunction.StatInfo(statInputConfig, shopInputConfig,currentButtonName); });
             }
         }
         

@@ -9,16 +9,20 @@ namespace IdleClicker
     {
         private ShopFunction shopFunction;
         private ShopConfig shopConfig;
+        private TapCounterFunction tapCounterFunction;
+        private MainGameInitConfig mainGameInitConfig;
         private List<Button> buttonAvailableToPlayer;
-        private int totalBalance;
+      
      
 
-        public ShopCommand(ShopFunction shopFunction, ShopConfig shopConfig, List<Button> buttonAvailableToPlayer , int toatalBalance)
+        public ShopCommand(ShopFunction shopFunction, ShopConfig shopConfig, List<Button> buttonAvailableToPlayer, TapCounterFunction tapCounterFunction,MainGameInitConfig mainGameInitConfig )
         {
             this.shopFunction = shopFunction;   
             this.shopConfig = shopConfig;
             this.buttonAvailableToPlayer = buttonAvailableToPlayer;
-            this.totalBalance = toatalBalance;
+          
+            this.tapCounterFunction = tapCounterFunction;
+            this.mainGameInitConfig = mainGameInitConfig;
         }
         public void StoreButtonListenerCommand()
         {
@@ -28,7 +32,7 @@ namespace IdleClicker
 
                 button.onClick.AddListener(() =>
                 {
-                    shopFunction.FetchShopDetails(shopConfig,currentButtonName);
+                    shopFunction.FetchShopDetails(shopConfig,tapCounterFunction, currentButtonName);
                                   
                 });
             }

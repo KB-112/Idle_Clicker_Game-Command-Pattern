@@ -48,7 +48,7 @@ namespace IdleClicker
 
         public void RunButtonCommand(string name, List<Button> buttonList)
         {
-            Debug.Log("Character Animation effect for: " + name);
+         //   Debug.Log("Character Animation effect for: " + name);
 
             var data = luffyAnimationConfig.name == name ? luffyAnimationConfig.name : null;
 

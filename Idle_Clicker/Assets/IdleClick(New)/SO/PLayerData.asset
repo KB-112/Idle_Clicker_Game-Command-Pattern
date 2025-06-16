@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b46348813cde6f4a80d844242b62ccb, type: 3}
-  m_Name: ApiCont
+  m_Script: {fileID: 11500000, guid: 2ca83feb85aaf4d49a97b089933989cf, type: 3}
+  m_Name: PLayerData
   m_EditorClassIdentifier: 
-  onSuccess:
-    template: []
-  onFailure:
-    error: []
-  playerData: {fileID: 11400000, guid: 379d3a0110c71f241b88d8090919e85c, type: 2}
+  id: 1
+  User_Name: Neww
+  Score: 0
+  OnTapUpgradeLevel: 0
+  OnIdleUpgradeLevel: 0
+  TotalBalance: 0

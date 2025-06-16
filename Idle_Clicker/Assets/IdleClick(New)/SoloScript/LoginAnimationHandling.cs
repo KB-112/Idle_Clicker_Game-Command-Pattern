@@ -37,7 +37,7 @@ namespace IdleClicker
         {
             if (!string.IsNullOrEmpty(PlayerPrefs.GetString("User_Input")))
             {
-                Debug.Log("Saved Username: " + PlayerPrefs.GetString("User_Input"));
+            //    Debug.Log("Saved Username: " + PlayerPrefs.GetString("User_Input"));
 
                 fadeColor.w = 0f;
                 ApplyPostFadeState();

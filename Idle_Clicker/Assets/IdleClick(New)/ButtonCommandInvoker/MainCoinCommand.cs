@@ -25,7 +25,7 @@ namespace IdleClicker
 
                 button.onClick.AddListener(() =>
                 {
-                    Debug.Log("Main button Click");
+                  //  Debug.Log("Main button Click");
                     mainCoinClickFunction.MainCoinFunc(coinFuncConfig); 
                 });
             }

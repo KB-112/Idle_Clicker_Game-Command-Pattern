@@ -7,66 +7,100 @@ namespace IdleClicker
 {
     public class ShopFunction : MonoBehaviour
     {
-        public void FetchShopDetails(ShopConfig shopConfig, string buttonName)
+        public void FetchShopDetails(ShopConfig shopConfig, TapCounterFunction tapCounterFunction, string buttonName)
         {
+            Debug.Log($"Button Pressed: {buttonName}");
+            Debug.Log($"Upgrade1 Button Name: {shopConfig.buttonNameUpgrade1}");
+            Debug.Log($"Upgrade2 Button Name: {shopConfig.buttonNameUpgrade2}");
+
             if (shopConfig.buttonNameUpgrade1 == buttonName)
             {
-                
-                BuyTapUpgrade(shopConfig);
+                BuyTapUpgrade(shopConfig, tapCounterFunction);
             }
-
-            if (shopConfig.buttonNameUpgrade2 == buttonName)
+            else if (shopConfig.buttonNameUpgrade2 == buttonName)
             {
-
-                BuyIdleUpgrade(shopConfig);
+                BuyIdleUpgrade(shopConfig, tapCounterFunction);
             }
         }
 
-        public void Initializer(ShopConfig shopConfig)
+        public void Initializer(ShopConfig shopConfig, TapCounterFunction tapCounterFunction)
         {
-            UpdateTapUpgradeUI(shopConfig, shopConfig.tapUpgradeLevel);
-            UpdateIdleUpgradeUI(shopConfig, shopConfig.idleUpgradeLevel);
+            UpdateInitLevelStatus(shopConfig);
+            UpdateTapUpgradeUI(shopConfig, tapCounterFunction, shopConfig.tapUpgradeLevel);
+            UpdateIdleUpgradeUI(shopConfig, tapCounterFunction, shopConfig.idleUpgradeLevel);
         }
 
-        private void BuyTapUpgrade(ShopConfig shopConfig)
+        private void BuyTapUpgrade(ShopConfig shopConfig, TapCounterFunction tapCounterFunction)
         {
             int level = shopConfig.tapUpgradeLevel;
 
             if (level < shopConfig.tapUpgrades.Count)
             {
                 var upgrade = shopConfig.tapUpgrades[level];
-                Debug.Log($"[TAP] Current Balance: {shopConfig.totalBalance}, Upgrade Cost: {upgrade.cost}");
+                Debug.Log($"[TAP] Current Balance: {shopConfig.mainPlayerData.TotalBalance}, Upgrade Cost: {upgrade.cost}");
 
-                if (upgrade.cost <= shopConfig.totalBalance)
+                if (upgrade.cost <= shopConfig.mainPlayerData.TotalBalance)
                 {
-                    shopConfig.totalBalance -= upgrade.cost;
+                    shopConfig.mainPlayerData.TotalBalance -= upgrade.cost;
                     shopConfig.tapUpgradeLevel++;
-                    Debug.Log($"[TAP] Upgrade Purchased. New Level: {shopConfig.tapUpgradeLevel}, Remaining Balance: {shopConfig.totalBalance}");
-                    UpdateTapUpgradeUI(shopConfig, shopConfig.tapUpgradeLevel);
+                    Debug.Log($"[TAP] Upgrade Purchased. New Level: {shopConfig.tapUpgradeLevel}, Remaining Balance: {shopConfig.mainPlayerData.TotalBalance}");
+                    UpdateTapUpgradeUI(shopConfig, tapCounterFunction, shopConfig.tapUpgradeLevel);
                 }
             }
+
+            UpdateBuyStatus(shopConfig);
         }
 
-        private void BuyIdleUpgrade(ShopConfig shopConfig)
+        private void BuyIdleUpgrade(ShopConfig shopConfig, TapCounterFunction tapCounterFunction)
         {
             int level = shopConfig.idleUpgradeLevel;
 
             if (level < shopConfig.idleUpgrades.Count)
             {
                 var upgrade = shopConfig.idleUpgrades[level];
-                Debug.Log($"[IDLE] Current Balance: {shopConfig.totalBalance}, Upgrade Cost: {upgrade.cost}");
+                Debug.Log($"[IDLE] Current Balance: {shopConfig.mainPlayerData.TotalBalance}, Upgrade Cost: {upgrade.cost}");
 
-                if (upgrade.cost <= shopConfig.totalBalance)
+                if (upgrade.cost <= shopConfig.mainPlayerData.TotalBalance)
                 {
-                    shopConfig.totalBalance -= upgrade.cost;
+                    shopConfig.mainPlayerData.TotalBalance -= upgrade.cost;
                     shopConfig.idleUpgradeLevel++;
-                    Debug.Log($"[IDLE] Upgrade Purchased. New Level: {shopConfig.idleUpgradeLevel}, Remaining Balance: {shopConfig.totalBalance}");
-                    UpdateIdleUpgradeUI(shopConfig, shopConfig.idleUpgradeLevel);
+                    Debug.Log($"[IDLE] Upgrade Purchased. New Level: {shopConfig.idleUpgradeLevel}, Remaining Balance: {shopConfig.mainPlayerData.TotalBalance}");
+                    UpdateIdleUpgradeUI(shopConfig, tapCounterFunction, shopConfig.idleUpgradeLevel);
                 }
             }
+
+            UpdateBuyStatus(shopConfig);
         }
 
-        private void UpdateTapUpgradeUI(ShopConfig shopConfig, int level)
+        void UpdateInitLevelStatus(ShopConfig shopConfig)
+        {
+            shopConfig.apiExecutor.ExecuteCommand(
+                new GetCommand(),
+                "https://6824498265ba05803399a0a2.mockapi.io/api/v1/User_Name/" + shopConfig.mainPlayerData.id
+            );
+
+            shopConfig.tapUpgradeLevel = shopConfig.mainPlayerData.OnTapUpgradeLevel;
+            shopConfig.idleUpgradeLevel = shopConfig.mainPlayerData.OnIdleUpgradeLevel;
+
+            Debug.Log($"[GET] Tap Level: {shopConfig.tapUpgradeLevel}, Idle Level: {shopConfig.idleUpgradeLevel} , Total Balance : {shopConfig.mainPlayerData.TotalBalance} ");
+        }
+
+        void UpdateBuyStatus(ShopConfig shopConfig)
+        {
+            shopConfig.mainPlayerData.OnTapUpgradeLevel = shopConfig.tapUpgradeLevel;
+            shopConfig.mainPlayerData.OnIdleUpgradeLevel = shopConfig.idleUpgradeLevel;
+
+            string jsonData = JsonUtility.ToJson(shopConfig.mainPlayerData);
+            shopConfig.apiExecutor.ExecuteCommand(
+                new PutCommand(),
+                "https://6824498265ba05803399a0a2.mockapi.io/api/v1/User_Name/" + shopConfig.mainPlayerData.id,
+                jsonData
+            );
+
+            Debug.Log($"[PUT] Tap Level: {shopConfig.mainPlayerData.OnTapUpgradeLevel}, Idle Level: {shopConfig.mainPlayerData.OnIdleUpgradeLevel}");
+        }
+
+        private void UpdateTapUpgradeUI(ShopConfig shopConfig, TapCounterFunction tapCounterFunction, int level)
         {
             if (level < shopConfig.tapUpgrades.Count)
             {
@@ -81,7 +115,7 @@ namespace IdleClicker
             }
         }
 
-        private void UpdateIdleUpgradeUI(ShopConfig shopConfig, int level)
+        private void UpdateIdleUpgradeUI(ShopConfig shopConfig, TapCounterFunction tapCounterFunction, int level)
         {
             if (level < shopConfig.idleUpgrades.Count)
             {
@@ -120,7 +154,6 @@ namespace IdleClicker
         public int tapUpgradeLevel = 0;
         public TextMeshProUGUI tapUpgradeText;
         public TextMeshProUGUI tapUpgradeCostText;
-      
 
         [Header("Idle Upgrade Settings")]
         public string buttonNameUpgrade2;
@@ -128,9 +161,8 @@ namespace IdleClicker
         public int idleUpgradeLevel = 0;
         public TextMeshProUGUI idleUpgradeText;
         public TextMeshProUGUI idleUpgradeCostText;
-        
 
-        [Header("Balance")]
-        public int totalBalance;
+        public ApiCommandExecutor apiExecutor;
+        public MainPlayerData mainPlayerData;
     }
 }

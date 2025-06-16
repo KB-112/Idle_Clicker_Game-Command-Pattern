@@ -10,12 +10,14 @@ namespace IdleClicker
         private List<Button> playerButtons;
         PanelSwitcherConfig config;
         PanelSwitcherFunction panelSwitcherFunction;
+        private RankConfig rankConfig;
 
-        public PanelSwitcherCommand(PanelSwitcherFunction panelSwitcherFunction, PanelSwitcherConfig config, List<Button> playerButtons)
+        public PanelSwitcherCommand(PanelSwitcherFunction panelSwitcherFunction, PanelSwitcherConfig config,RankConfig rankConfig, List<Button> playerButtons)
         {
             this.panelSwitcherFunction = panelSwitcherFunction;
             this.config = config;
             this.playerButtons = playerButtons;
+            this.rankConfig = rankConfig;
 
         }
         public void StoreButtonListenerCommand()
@@ -26,7 +28,7 @@ namespace IdleClicker
 
                 button.onClick.AddListener(() =>
                 {
-                    panelSwitcherFunction.UpdateDescription(config,currentButtonName);
+                    panelSwitcherFunction.UpdateDescription(config,rankConfig,currentButtonName);
                 });
             }
         }

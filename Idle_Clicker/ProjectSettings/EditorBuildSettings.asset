@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/IdleClickerRes/Scene/Menu_Test_Mode.unity
     guid: 7b0e31442a681384eae697170f52c06c
+  - enabled: 1
+    path: Packages/com.benoitfreslon.vibration/Vibration/Example/VibrationExample.unity
+    guid: 97713010e65794861b2e4b75c95a2ece
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 8758d2b72581bb04dacbf4c0a0a57b9f, type: 2}
     com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 9034f284f0e320944a6c1190bebe0b16, type: 2}

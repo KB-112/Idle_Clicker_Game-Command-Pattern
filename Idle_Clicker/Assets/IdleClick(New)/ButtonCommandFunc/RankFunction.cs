@@ -9,70 +9,58 @@ namespace IdleClicker
 {
     public class RankFunction : MonoBehaviour
     {
+       
 
-
-        public void PlayerInfo(RankConfig rankConfig, TapCounterConfig tapCounterConfig, TapCounterFunction tapCounterFunction)
+        public void FetchRankFunction(RankConfig rankConfig, TapCounterConfig tapCounterConfig, TapCounterFunction tapCounterFunction, string buttonAvailableToPlayer)
         {
-            string currentUser = PlayerPrefs.GetString("User_Input");
-            Debug.Log("Checking player info for user input: " + currentUser);
-
-            for (int i = 0; i < rankConfig.rankList.rankEntries.Count; i++)
+            if (rankConfig == null)
             {
-                string entryName = rankConfig.rankList.rankEntries[i].playerName;
-                Debug.Log($"Checking rank entry {i}: PlayerName = {entryName}");
-
-                if (entryName == currentUser)
+                Debug.Log("Rank COnfig null");
+            }
+            else
+            {
+                if (rankConfig.buttonAvailableToPlayer == buttonAvailableToPlayer)
                 {
-                    Debug.Log("Match found. Creating UserData...");
-
-                    UserData user = new UserData
-                    {
-                        User_Name = entryName,
-                        Score = tapCounterConfig.currentScore,
-                        id = rankConfig.rankList.rankEntries[i].playerId
-                    };
-
-                    Debug.Log($"UserData created: Name = {user.User_Name}, Score = {user.Score}, ID = {user.id}");
-
-                    tapCounterFunction.UserDataStore(user);
-                    Debug.Log("UserData stored successfully.");
+                    StartCoroutine(FetchLeaderboardDataCoroutine(rankConfig, tapCounterConfig, tapCounterFunction));
                 }
-            }
-
-            Debug.Log("PlayerInfo processing completed.");
-        }
-
-        public void FetchRankFunction(RankConfig rankConfig, string buttonAvailableToPlayer)
-        {
-            if (rankConfig.buttonAvailableToPlayer == buttonAvailableToPlayer && rankConfig != null)
-            {
-                StartCoroutine(FetchLeaderboardDataCoroutine(rankConfig));
-            }
            
+            }
+
+           
+          
         }
 
-        IEnumerator FetchLeaderboardDataCoroutine(RankConfig rankConfig)
+        public IEnumerator FetchLeaderboardDataCoroutine(RankConfig rankConfig, TapCounterConfig tapCounterConfig, TapCounterFunction tapCounterFunction)
         {
-            // Show loading immediately
+            Debug.Log("Leaderboard Execution");
             rankConfig.loadingText.text = "Loading...";
 
-            // Clear previous entries early for visual feedback
-            foreach (Transform child in rankConfig.leaderboardParentTransform)
-                Destroy(child.gameObject);
+            ClearLeaderboard(rankConfig.leaderboardParentTransform);
 
-            // Execute API request
             rankConfig.apiExecutor.ExecuteCommand(new GetCommand(),
                 "https://6824498265ba05803399a0a2.mockapi.io/api/v1/User_Name", null);
 
-            // Wait until data is available
             yield return new WaitUntil(() =>
-                rankConfig.apiHolder != null &&
-                rankConfig.apiHolder.onSuccess != null &&
-                rankConfig.apiHolder.onSuccess.template != null &&
-                rankConfig.apiHolder.onSuccess.template.Count > 0
-            );
+                rankConfig.apiHolder?.onSuccess?.template?.Count > 0);
 
-            // Populate leaderboard list
+            PopulateRankEntries(rankConfig);
+            InstantiateLeaderboard(rankConfig);
+
+            yield return null;
+            RebuildUI(rankConfig);
+
+          
+            rankConfig.loadingText.text = "";
+        }
+
+        private void ClearLeaderboard(Transform leaderboardParent)
+        {
+            foreach (Transform child in leaderboardParent)
+                Destroy(child.gameObject);
+        }
+
+        private void PopulateRankEntries(RankConfig rankConfig)
+        {
             rankConfig.rankList.rankEntries = rankConfig.apiHolder.onSuccess.template
                 .Select(t => new RankEntry
                 {
@@ -82,37 +70,32 @@ namespace IdleClicker
                 })
                 .OrderByDescending(entry => entry.playerScore)
                 .ToList();
+        }
 
-            // Instantiate leaderboard items
-            foreach (var (entry, i) in rankConfig.rankList.rankEntries.Select((e, i) => (e, i)))
+        private void InstantiateLeaderboard(RankConfig rankConfig)
+        {
+            for (int i = 0; i < rankConfig.rankList.rankEntries.Count; i++)
             {
+                var entry = rankConfig.rankList.rankEntries[i];
                 GameObject item = Instantiate(rankConfig.rankEntryPrefab, rankConfig.leaderboardParentTransform);
 
                 var nameText = item.transform.Find("Info_Text")?.GetComponent<TextMeshProUGUI>();
-                if (nameText != null)
-                    nameText.text = $"{i + 1}. {entry.playerName}";
-
                 var scoreText = item.transform.Find("Score_Text")?.GetComponent<TextMeshProUGUI>();
-                if (scoreText != null)
-                    scoreText.text = entry.playerScore.ToString();
-            }
 
-            // Wait one frame and rebuild layout
-            yield return null;
+                if (nameText != null) nameText.text = $"{i + 1}. {entry.playerName}";
+                if (scoreText != null) scoreText.text = entry.playerScore.ToString();
+            }
+        }
+
+        private void RebuildUI(RankConfig rankConfig)
+        {
             Canvas.ForceUpdateCanvases();
             LayoutRebuilder.ForceRebuildLayoutImmediate(rankConfig.leaderboardParentTransform.GetComponent<RectTransform>());
 
-            // Scroll to top
             var scrollRect = rankConfig.leaderboardParentTransform.GetComponentInParent<ScrollRect>();
             if (scrollRect != null)
                 scrollRect.verticalNormalizedPosition = 1f;
-
-            // Hide loading text
-            rankConfig.loadingText.text = "";
         }
-
-
-
     }
 
     [System.Serializable]
@@ -121,6 +104,8 @@ namespace IdleClicker
         public string playerName;
         public int playerScore;
         public int playerId;
+        public int OnTapUpgradeLevel;
+        public int OnIdleUpgradeLevel;
     }
 
     [System.Serializable]
@@ -148,5 +133,7 @@ namespace IdleClicker
         public int id;
         public string User_Name;
         public int Score;
+        public int OnTapUpgradeLevel;
+        public int OnIdleUpgradeLevel;
     }
 }

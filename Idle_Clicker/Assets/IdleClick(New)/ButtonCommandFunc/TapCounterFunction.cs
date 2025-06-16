@@ -8,63 +8,64 @@ namespace IdleClicker
     {
         public static Action onTapping;
         public static Action startIdleCounter;
-        public static Action<MainGameInitConfig, TapCounterConfig, NonTapCounterConfig> updateScore;
 
-        private float lastTapTime;
-        private bool isCooldownActive = false;
         private Coroutine cooldownRoutine;
-
-        [SerializeField] private UserData _userData;
+        private bool isCooldownActive;
 
         private TapCounterConfig _tapCounterConfig;
         private NonTapCounterConfig _nonTapCounterConfig;
-        private ShopConfig shopConfig;
+        private ShopConfig _shopConfig;
+        private MainGameInitConfig _mainGameInitConfig;
 
-        void OnEnable()
+        private void OnEnable()
         {
             MainGameInitFunction.onGameStarted += ResetTapCounter;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             MainGameInitFunction.onGameStarted -= ResetTapCounter;
         }
 
-        public void UserDataStore(UserData userData)
+        public void FetchTapCounterFunction(MainGameInitConfig initCfg, TapCounterConfig tapCfg, NonTapCounterConfig idleCfg, ShopConfig shopCfg, string buttonName)
         {
-            _userData = userData;
+            _mainGameInitConfig = initCfg;
+            _tapCounterConfig = tapCfg;
+            _nonTapCounterConfig = idleCfg;
+            _shopConfig = shopCfg;
+            _tapCounterConfig.currentScore = _tapCounterConfig.mainPlayerData.Score;
+            HighScore();
+            if (_tapCounterConfig.buttonName == buttonName)
+            {
+                HandleTap(); // First tap
+                StartCooldownCheck();
+
+            }
+           
         }
 
-        public void FetchTapCounterFunction(MainGameInitConfig mainGameInitConfig, TapCounterConfig tapCounterConfig, NonTapCounterConfig nonTapCounterConfig, ShopConfig shopConfig, string buttonName)
+        private void HandleTap()
         {
-            this._tapCounterConfig = tapCounterConfig;
-            this._nonTapCounterConfig = nonTapCounterConfig;
-            this.shopConfig = shopConfig;
-
-            float timeSinceLastTap = Time.time - lastTapTime;
-
-            if (timeSinceLastTap >= _tapCounterConfig.cooldownPeriod)
+            // If idle was running, reset it
+            if (_nonTapCounterConfig.isNonClickEarner && _tapCounterConfig != null)
             {
-                CoinIncrOnTapping(mainGameInitConfig);
-                StartCooldownCheck();
+                Debug.Log("Switching from idle to tap. Resetting scores.");
+                _nonTapCounterConfig.isNonClickEarner = false;
+                _nonTapCounterConfig.idleScore = 0;
+
+                _tapCounterConfig.tapScore = 0;
+                _tapCounterConfig.currentScore = 0;
             }
 
-            lastTapTime = Time.time;
-        }
-
-        private void CoinIncrOnTapping(MainGameInitConfig mainGameInitConfig)
-        {
             onTapping?.Invoke();
 
-            int coinsEarned = shopConfig.tapUpgrades[shopConfig.tapUpgradeLevel].tapPerIncrement;
+            int coinsEarned = _shopConfig.tapUpgrades[_shopConfig.tapUpgradeLevel].tapPerIncrement;
 
             _tapCounterConfig.tapScore += coinsEarned;
-            _tapCounterConfig.currentScore = _tapCounterConfig.tapScore;
-            mainGameInitConfig.totalBalance += coinsEarned;
+          _tapCounterConfig.currentScore = _tapCounterConfig.tapScore;
+            _tapCounterConfig.mainPlayerData.TotalBalance += coinsEarned;
 
-            mainGameInitConfig.scoreText.text = _tapCounterConfig.tapScore.ToString();
-
-            updateScore?.Invoke(mainGameInitConfig, _tapCounterConfig, _nonTapCounterConfig);
+            _mainGameInitConfig.scoreText.text = _tapCounterConfig.tapScore.ToString();
         }
 
         private void StartCooldownCheck()
@@ -86,36 +87,46 @@ namespace IdleClicker
             _nonTapCounterConfig.isNonClickEarner = true;
 
             UpdateScoreToAPI();
+
+            Debug.Log("Invoking startIdleCounter event");
             startIdleCounter?.Invoke();
         }
 
         private void UpdateScoreToAPI()
         {
-            if (_userData == null || _tapCounterConfig.apiExecutor == null)
+            if (_tapCounterConfig.mainPlayerData == null || _tapCounterConfig.apiExecutor == null)
                 return;
-
-            string jsonData = JsonUtility.ToJson(_userData);
+            HighScore();
+            string jsonData = JsonUtility.ToJson(_tapCounterConfig.mainPlayerData);
+           
             _tapCounterConfig.apiExecutor.ExecuteCommand(
                 new PutCommand(),
-                $"https://6824498265ba05803399a0a2.mockapi.io/api/v1/User_Name/{_userData.id}",
+                $"https://6824498265ba05803399a0a2.mockapi.io/api/v1/User_Name/{_tapCounterConfig.mainPlayerData.id}",
                 jsonData
             );
         }
 
         private void ResetTapCounter()
         {
-            if (_tapCounterConfig != null)
-            {
-                _tapCounterConfig.tapScore = 0;
-                _tapCounterConfig.currentScore = 0;
-            }
+            _tapCounterConfig.tapScore = 0;
+            _tapCounterConfig.currentScore = 0;
 
-            if (_nonTapCounterConfig != null)
-                _nonTapCounterConfig.isNonClickEarner = false;
+            _nonTapCounterConfig.isNonClickEarner = false;
+            _nonTapCounterConfig.idleScore = 0;
 
             isCooldownActive = false;
-            lastTapTime = Time.time;
         }
+
+
+        void HighScore()
+        {
+            if (_tapCounterConfig.currentScore > _tapCounterConfig.mainPlayerData.Score)
+            {
+                Debug.Log($"New High Score: {_tapCounterConfig.currentScore}");
+                _tapCounterConfig.mainPlayerData.Score = _tapCounterConfig.currentScore;
+            }
+        }
+
     }
 
     [Serializable]
@@ -124,8 +135,11 @@ namespace IdleClicker
         public string buttonName;
         public int tapScore;
         public int currentScore;
+
         [Tooltip("Cooldown period in seconds between taps.")]
         public float cooldownPeriod = 1.0f;
+
         public ApiCommandExecutor apiExecutor;
+        public MainPlayerData mainPlayerData;
     }
 }

@@ -11,12 +11,20 @@ namespace IdleClicker
          List<Button> playerButtons;
          RankFunction rankFunction;
          RankConfig rankConfig;
+        TapCounterConfig tapCounterConfig;
+        TapCounterFunction tapCounterFunction;
+      
 
-        public RankCommand(RankFunction rankFunction,RankConfig rankConfig, List<Button> playerButtons)
+        public RankCommand(RankFunction rankFunction,RankConfig rankConfig, TapCounterConfig tapCounterConfig, TapCounterFunction tapCounterFunction, List<Button> playerButtons )
         {
             this.playerButtons = playerButtons;
             this.rankFunction = rankFunction;
             this.rankConfig = rankConfig;
+            this.tapCounterConfig = tapCounterConfig;
+            this.tapCounterFunction = tapCounterFunction;
+
+          
+          
         }
 
         public void StoreButtonListenerCommand()
@@ -27,8 +35,10 @@ namespace IdleClicker
 
                 button.onClick.AddListener(() =>
                 {
-                    rankFunction.FetchRankFunction(rankConfig,currentButtonName);
+                    rankFunction.FetchRankFunction(rankConfig,tapCounterConfig,tapCounterFunction ,currentButtonName);
+                  
                 });
+               // Debug.Log(" Rank Count " + rankConfig.rankList.rankEntries.Count);
             }
         }
     }

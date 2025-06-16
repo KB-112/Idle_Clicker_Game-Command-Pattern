@@ -602,6 +602,7 @@ GameObject:
   - component: {fileID: 86086885}
   - component: {fileID: 86086887}
   - component: {fileID: 86086893}
+  - component: {fileID: 86086892}
   - component: {fileID: 86086894}
   - component: {fileID: 86086876}
   - component: {fileID: 86086877}
@@ -611,7 +612,6 @@ GameObject:
   - component: {fileID: 86086889}
   - component: {fileID: 86086890}
   - component: {fileID: 86086891}
-  - component: {fileID: 86086892}
   - component: {fileID: 86086895}
   m_Layer: 0
   m_Name: New_Script_Manger
@@ -661,6 +661,7 @@ MonoBehaviour:
   - {fileID: 714743145}
   nonClickableButton:
   - {fileID: 193007687}
+  - {fileID: 826962263}
   bounceEffectConfigs:
   - name: Coin_Button
     targetTransform: {fileID: 1526070309}
@@ -808,8 +809,8 @@ MonoBehaviour:
   statInputConfig:
     buttonName: Stat_Button
     statInfo: {fileID: 973421108}
-    totalBalance: 0
     previousScoreText: {fileID: 193333510}
+    playerData: {fileID: 11400000, guid: 379d3a0110c71f241b88d8090919e85c, type: 2}
   panelSwitcherConfig:
     buttonName:
     - Stat_Button
@@ -866,13 +867,14 @@ MonoBehaviour:
     idleUpgradeLevel: 0
     idleUpgradeText: {fileID: 1639859313}
     idleUpgradeCostText: {fileID: 2086010432}
-    totalBalance: 1000
+    apiExecutor: {fileID: 86086888}
+    mainPlayerData: {fileID: 11400000, guid: 379d3a0110c71f241b88d8090919e85c, type: 2}
   mainGameInitConfig:
     buttonName: Tap_To_Play_Button
     buttonName1: Coin_Button
     tapScore: 0
     idleScore: 0
-    totalBalance: 0
+    playerData: {fileID: 11400000, guid: 379d3a0110c71f241b88d8090919e85c, type: 2}
     tapToPlay: {fileID: 826962263}
     scoreText: {fileID: 193333510}
   tapCounterConfig:
@@ -881,9 +883,12 @@ MonoBehaviour:
     currentScore: 0
     cooldownPeriod: 2
     apiExecutor: {fileID: 86086888}
+    mainPlayerData: {fileID: 11400000, guid: 379d3a0110c71f241b88d8090919e85c, type: 2}
   nonTapCounterConfig:
+    name: Tap_To_Play_Button
     idleScore: 0
     isNonClickEarner: 0
+    playerData: {fileID: 11400000, guid: 379d3a0110c71f241b88d8090919e85c, type: 2}
 --- !u!114 &86086876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,6 +994,8 @@ MonoBehaviour:
   previewNameText: {fileID: 1941373849}
   requiredNameLength: 4
   apiExecutor: {fileID: 86086888}
+  mainPlayerData: {fileID: 11400000, guid: 379d3a0110c71f241b88d8090919e85c, type: 2}
+  okButton: {fileID: 1974038570}
 --- !u!114 &86086887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1092,10 +1099,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b6964fdf7f5dbb4c811d792507b3467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _userData:
-    id: 0
-    User_Name: 
-    Score: 0
 --- !u!114 &86086894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3330,7 +3333,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 350, y: -630}
+  m_AnchoredPosition: {x: 350, y: -629.99994}
   m_SizeDelta: {x: 700, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &636146938
@@ -3411,7 +3414,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 54.99951}
-  m_SizeDelta: {x: 700, y: -327.5}
+  m_SizeDelta: {x: 700, y: -327.24133}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &694761834
 MonoBehaviour:
@@ -4360,8 +4363,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -10}
-  m_SizeDelta: {x: 100, y: 10}
+  m_AnchoredPosition: {x: 349.99997, y: -258.62057}
+  m_SizeDelta: {x: 700, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &896967386
 MonoBehaviour:
@@ -4378,8 +4381,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
-    m_Bottom: 10
+    m_Top: 150
+    m_Bottom: 50
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -4786,7 +4789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Content: {fileID: 373686622}
+  m_Content: {fileID: 896967385}
   m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 2

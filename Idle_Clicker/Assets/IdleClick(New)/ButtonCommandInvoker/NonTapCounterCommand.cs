@@ -12,23 +12,32 @@ namespace IdleClicker
         private NonTapCounterConfig nonTapCounterConfig;
         private MainGameInitConfig mainGameInitConfig;
         private TapCounterConfig tapCounterConfig;
-       
+        private List<Button> buttonAvailableToPlayer;
 
 
         public NonTapCounterCommand(NonTapCounterFunction nonTapCounterFunction, ShopConfig shopConfig,
-                                          NonTapCounterConfig nonTapCounterConfig, MainGameInitConfig mainGameInitConfig)
+                                          NonTapCounterConfig nonTapCounterConfig, MainGameInitConfig mainGameInitConfig, List<Button> buttonAvailableToPlayer)
         {
             this.nonTapCounterFunction = nonTapCounterFunction;
             this.shopConfig = shopConfig;
             this.nonTapCounterConfig = nonTapCounterConfig;
             this.mainGameInitConfig = mainGameInitConfig;
-
+            this.buttonAvailableToPlayer = buttonAvailableToPlayer;
         }
 
         public void StoreButtonListenerCommand()
         {
-            nonTapCounterFunction.FetchNonTapCounterFunction(shopConfig, nonTapCounterConfig, mainGameInitConfig,tapCounterConfig);
-            
+            foreach (var button in buttonAvailableToPlayer)
+            {
+                string currentButtonName = button.name;
+
+                button.onClick.AddListener(() =>
+                {
+                    nonTapCounterFunction.FetchNonTapCounterFunction(shopConfig, nonTapCounterConfig, mainGameInitConfig, tapCounterConfig,currentButtonName);
+
+                });
+
+            }
+            }
         }
     }
-}
