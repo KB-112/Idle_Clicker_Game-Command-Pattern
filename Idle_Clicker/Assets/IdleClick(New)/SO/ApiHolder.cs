@@ -19,6 +19,7 @@ namespace IdleClicker
         {
            
             string currentUser = PlayerPrefs.GetString("User_Input");
+
            // Debug.Log($"[GlobalUserData] CurrentUser from PlayerPrefs: '{currentUser}'");
 
             foreach (var entry in onSuccess.template)

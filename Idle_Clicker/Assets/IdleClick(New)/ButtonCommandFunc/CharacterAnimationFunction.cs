@@ -28,10 +28,15 @@ namespace IdleClicker
                 luffyAnimationConfig.luffyAnimator.SetBool("Luffy_Anim", false);
         }
 
-        public void TriggerLuffyAnimation(MultiplierBarManager multiplierBarManager)
+        public void TriggerLuffyAnimation(MultiplierBarManager multiplierBarManager, string buttonName)
         {
             if (multiplierBarManager == null) return;
-            UpdateLuffyAnimation(multiplierBarManager);
+            if(multiplierBarManager.name ==buttonName)
+            {
+                UpdateLuffyAnimation(multiplierBarManager);
+            }
+           
+
         }
 
         private void UpdateLuffyAnimation(MultiplierBarManager multiplierBarManager)

@@ -13,5 +13,8 @@ namespace IdleClicker
         public int OnTapUpgradeLevel;
         public int OnIdleUpgradeLevel;
         public int TotalBalance;
+
+
+        
     }
 }

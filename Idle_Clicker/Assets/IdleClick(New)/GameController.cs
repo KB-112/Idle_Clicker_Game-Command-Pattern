@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,6 +46,7 @@ namespace IdleClicker
         [SerializeField] private MainGameInitConfig mainGameInitConfig;
         [SerializeField] private TapCounterConfig tapCounterConfig;
         [SerializeField] private NonTapCounterConfig nonTapCounterConfig;
+      
         
       
 
@@ -84,22 +86,57 @@ namespace IdleClicker
 
         private void Start()
         {
-            IntializeContBounceEffect();
-            InitializeGameCommandOnClick();
+            
 
+                InitializeGameCommandOnClick();
+            IntializeContBounceEffect();
+            InitializeAnimation();
+            InitializeMultiplier();
+
+            StartCoroutine(WaitForTapCounter());
+
+            InitializeAfteUserInput();
+
+
+
+
+
+        }
+
+        IEnumerator WaitForTapCounter()
+        {
+          
+            while (tapCounterFunction == null)
+            {
+                yield return null; 
+            }
+
+            
+            tapCounterFunction.HighScore();
+        }
+
+        void InitializeAfteUserInput()
+        {
             string savedName = PlayerPrefs.GetString("User_Input");
 
             if (!string.IsNullOrEmpty(savedName))
             {
                 InitializeFunctionValue();
 
-              
-            }
-           
 
+            }
         }
 
-       
+          void InitializeMultiplier()
+        {
+            multiplierBarFunction.IntialValueofMutiplier(multiplierBarManager);
+
+        }
+        void InitializeAnimation()
+        {
+            characterAnimationFunction.InitializeLuffyAnimation(luffyAnimationConfig);
+
+        }
         void IntializeContBounceEffect()
         {
             if (bounceEffectConfigs != null && bounceEffectConfigs.Count > 0)
@@ -114,13 +151,10 @@ namespace IdleClicker
 
         void InitializeFunctionValue()
         {
-            multiplierBarFunction.IntialValueofMutiplier(multiplierBarManager);
-            characterAnimationFunction.InitializeLuffyAnimation(luffyAnimationConfig);
-            shopFunction.Initializer(shopConfig, tapCounterFunction);
+          
            
-
-
-                StartCoroutine(rankFunction.FetchLeaderboardDataCoroutine(rankConfig, tapCounterConfig, tapCounterFunction));
+            shopFunction.Initializer(shopConfig, tapCounterFunction);          
+            StartCoroutine(rankFunction.FetchLeaderboardDataCoroutine(rankConfig, tapCounterConfig, tapCounterFunction));
             RankLoadingDuringInitialPhase();
           
 
@@ -190,8 +224,9 @@ namespace IdleClicker
             }
 
             // Character Animation Command
-            if (luffyAnimationConfig != null && multiplierBarManager != null)
+            if (luffyAnimationConfig != null)
             {
+               
                 var command = new CharacterAnimationCommand(characterAnimationFunction, luffyAnimationConfig, buttonsAvailableToPlayer, multiplierBarManager);
                 command.StoreButtonListenerCommand();
                 buttonCommands.Add(command);

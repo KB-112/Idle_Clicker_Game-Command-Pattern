@@ -24,46 +24,29 @@ namespace IdleClicker
             this.multiplierBarManager = multiplierBarManager;
         }
 
+
         public void StoreButtonListenerCommand()
         {
             foreach (var button in playerButtons)
             {
                 string currentButtonName = button.name;
 
-                // Check if already assigned
-                if (assignedButtons.Contains(currentButtonName))
-                {
-                    Debug.Log($"Listener already assigned for: {currentButtonName}");
-                    return;
-                }
-
                 button.onClick.AddListener(() =>
                 {
-                    RunButtonCommand(currentButtonName, playerButtons);
+
+                    characterAnimationFunction.TriggerLuffyAnimation(multiplierBarManager, currentButtonName);
+                    Debug.Log("Luffy Animation call");
+
                 });
 
-                assignedButtons.Add(currentButtonName); // Mark as assigned
             }
         }
-
-        public void RunButtonCommand(string name, List<Button> buttonList)
-        {
-         //   Debug.Log("Character Animation effect for: " + name);
-
-            var data = luffyAnimationConfig.name == name ? luffyAnimationConfig.name : null;
-
-            if (data != null && characterAnimationFunction!= null)
-            {
-                characterAnimationFunction.TriggerLuffyAnimation(multiplierBarManager);
-            }
-            else
-            {
-                Debug.LogWarning($"Character Animation effect  not found for: {name}");
-            }
-        }
-
-
     }
+
+       
+
+
+    
 
 
 }

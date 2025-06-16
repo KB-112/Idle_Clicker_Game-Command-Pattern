@@ -18,9 +18,7 @@ namespace IdleClicker
             
             if(buttonList.Any(n => n.name ==  buttonName))
             {
-                
-                //debuggerName.bounceDebuggerCommand = () => Debug.Log("Debug,Test");
-                //debuggerName.StoreDebuggerCommand(DebuggerNameList.BOUNCE_DEBUGGER);
+               
                 if (isAnimating || targetTransform == null)
                 {
                     onComplete?.Invoke();

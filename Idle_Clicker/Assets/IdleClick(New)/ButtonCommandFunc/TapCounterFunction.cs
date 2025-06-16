@@ -19,6 +19,7 @@ namespace IdleClicker
 
         private void OnEnable()
         {
+            Vibration.Init();
             MainGameInitFunction.onGameStarted += ResetTapCounter;
         }
 
@@ -33,21 +34,17 @@ namespace IdleClicker
             _tapCounterConfig = tapCfg;
             _nonTapCounterConfig = idleCfg;
             _shopConfig = shopCfg;
-            _tapCounterConfig.currentScore = _tapCounterConfig.mainPlayerData.Score;
-            HighScore();
+
             if (_tapCounterConfig.buttonName == buttonName)
             {
-                HandleTap(); // First tap
+                HandleTap(); 
                 StartCooldownCheck();
-
             }
-           
         }
 
         private void HandleTap()
         {
-            // If idle was running, reset it
-            if (_nonTapCounterConfig.isNonClickEarner && _tapCounterConfig != null)
+            if (_nonTapCounterConfig.isNonClickEarner)
             {
                 Debug.Log("Switching from idle to tap. Resetting scores.");
                 _nonTapCounterConfig.isNonClickEarner = false;
@@ -62,9 +59,9 @@ namespace IdleClicker
             int coinsEarned = _shopConfig.tapUpgrades[_shopConfig.tapUpgradeLevel].tapPerIncrement;
 
             _tapCounterConfig.tapScore += coinsEarned;
-          _tapCounterConfig.currentScore = _tapCounterConfig.tapScore;
+            _tapCounterConfig.currentScore = _tapCounterConfig.tapScore;
             _tapCounterConfig.mainPlayerData.TotalBalance += coinsEarned;
-
+            Vibration.VibratePop();
             _mainGameInitConfig.scoreText.text = _tapCounterConfig.tapScore.ToString();
         }
 
@@ -86,6 +83,7 @@ namespace IdleClicker
             isCooldownActive = false;
             _nonTapCounterConfig.isNonClickEarner = true;
 
+            HighScore(); 
             UpdateScoreToAPI();
 
             Debug.Log("Invoking startIdleCounter event");
@@ -96,9 +94,11 @@ namespace IdleClicker
         {
             if (_tapCounterConfig.mainPlayerData == null || _tapCounterConfig.apiExecutor == null)
                 return;
-            HighScore();
+
             string jsonData = JsonUtility.ToJson(_tapCounterConfig.mainPlayerData);
-           
+
+            Debug.Log($"Sending updated score to API: {_tapCounterConfig.mainPlayerData.Score}");
+
             _tapCounterConfig.apiExecutor.ExecuteCommand(
                 new PutCommand(),
                 $"https://6824498265ba05803399a0a2.mockapi.io/api/v1/User_Name/{_tapCounterConfig.mainPlayerData.id}",
@@ -108,25 +108,38 @@ namespace IdleClicker
 
         private void ResetTapCounter()
         {
-            _tapCounterConfig.tapScore = 0;
-            _tapCounterConfig.currentScore = 0;
+            if(_tapCounterConfig !=null)
+            {
+                Debug.Log("ResetTapCounter called");
 
-            _nonTapCounterConfig.isNonClickEarner = false;
-            _nonTapCounterConfig.idleScore = 0;
+                _tapCounterConfig.tapScore = 0;
+                _tapCounterConfig.currentScore = 0;
 
-            isCooldownActive = false;
+                _nonTapCounterConfig.isNonClickEarner = false;
+                _nonTapCounterConfig.idleScore = 0;
+
+                isCooldownActive = false;
+            }
+           
         }
 
-
-        void HighScore()
+        public void HighScore()
         {
-            if (_tapCounterConfig.currentScore > _tapCounterConfig.mainPlayerData.Score)
+            if (_tapCounterConfig != null)
             {
-                Debug.Log($"New High Score: {_tapCounterConfig.currentScore}");
-                _tapCounterConfig.mainPlayerData.Score = _tapCounterConfig.currentScore;
+
+
+                if (_tapCounterConfig.currentScore > _tapCounterConfig.mainPlayerData.Score)
+                {
+                    Debug.Log($"New High Score: {_tapCounterConfig.currentScore}");
+                    _tapCounterConfig.mainPlayerData.Score = _tapCounterConfig.currentScore;
+                }
+                else
+                {
+                    Debug.Log($"No new high score. Current: {_tapCounterConfig.currentScore}, High: {_tapCounterConfig.mainPlayerData.Score}");
+                }
             }
         }
-
     }
 
     [Serializable]

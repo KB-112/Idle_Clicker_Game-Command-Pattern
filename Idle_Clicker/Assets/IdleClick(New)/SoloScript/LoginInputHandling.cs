@@ -22,12 +22,26 @@ namespace IdleClicker
         public Button okButton;
         private void Start()
         {
+            InitValue();
             ApplyInputConstraints();
             AssignNameOnInitialize();
            
             okButton.onClick.AddListener( () => CreateNewUser(nameInputField.text.ToString()));
         }
 
+        void InitValue()
+        {
+            if (nameInputField.characterLimit != requiredNameLength)
+            {
+               
+                mainPlayerData.Score = 0;
+                mainPlayerData.OnTapUpgradeLevel = 0;
+                mainPlayerData.OnIdleUpgradeLevel = 0;
+                mainPlayerData.TotalBalance = 100;
+            }
+
+           
+        }
 
         void AssignNameOnInitialize()
         {
