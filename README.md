@@ -20,6 +20,15 @@ This Unity project is a fully functional **Idle Clicker Game** developed with sc
   - `GET`: Fetch dynamic **leaderboard** and **player stats**.
   - `POST`: Push **new player entries** to the database (e.g., when a new player joins).
   - `PUT`: Update **existing player data** like balance and upgrade levels.
+    
+  ### 👤 Profile System (Local)
+
+- 📱 **Local Profile Management** (No API involved):
+  - Players can **create, assign, and switch profiles** on their device.
+  - Profile data is stored locally using **PlayerPrefs** or **JSON-based file saving**.
+  - Each profile stores: player name, upgrade levels, earned coins, and settings.
+  - Enables **multi-user support on a single device** (useful for families or testing).
+  - Fast switching without requiring internet connection or API calls.
 
 ### 🛒 Shop System
 
