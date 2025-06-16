@@ -1,45 +1,70 @@
-🕹️ Idle Clicker Game – Unity Project
-Unity Version: 2022.3.54f1
-Project Type: 2D Core Gameplay
+# 🕹️ Idle Clicker Game – Unity Project
 
-📌 Project Summary
-This Unity project is a fully functional Idle Clicker Game developed with scalable architecture and responsive feedback systems. It uses a Command Pattern for clean action handling, integrates with a MockAPI for real-time leaderboard and player data management, and includes modern UI animations, vibrations, and upgrade logic.
+**Unity Version:** `2022.3.54f1`  
+**Project Type:** `2D Core Gameplay`  
 
-🚀 Features
-🧠 Architecture & Design
-✅ Command Pattern: Clean decoupling of player input and system logic.
+---
 
-✅ API Integration:
+## 📌 Project Summary
 
-GET: Fetch dynamic leaderboard and player stats.
+This Unity project is a fully functional **Idle Clicker Game** developed with scalable architecture and responsive feedback systems. It uses a **Command Pattern** for clean action handling, integrates with a **MockAPI** for real-time leaderboard and player data management, and includes modern UI animations, vibrations, and upgrade logic.
 
-PUT: Update existing player data like balance and upgrade levels.
+---
 
-POST: Push new player entries to the database (e.g., when a new player joins).
+## 🚀 Features
 
-🛒 Shop System
-In-game shop with:
+### 🧠 Architecture & Design
 
-Active (Tap-based) upgrades.
+- ✅ **Command Pattern**: Clean decoupling of player input and system logic.
+- ✅ **API Integration**:
+  - `GET`: Fetch dynamic **leaderboard** and **player stats**.
+  - `POST`: Push **new player entries** to the database (e.g., when a new player joins).
+  - `PUT`: Update **existing player data** like balance and upgrade levels.
 
-Passive (Idle-based) upgrades.
+### 🛒 Shop System
 
-Dynamic cost scaling and level tracking.
+- In-game shop with:
+  - Active (Tap-based) upgrades.
+  - Passive (Idle-based) upgrades.
+  - Dynamic cost scaling and level tracking.
+  - Button-based event handling tied to upgrade actions.
+  - Server sync after each purchase.
 
-Button-based event handling tied to upgrade actions.
+### 🎮 Gameplay & Feedback
 
-Server sync after each purchase.
+- ⚡ **Tap to earn coins**, enhanced with multiplier visual effects.
+- ⏳ **Idle income** generation over time.
+- 🧮 **Level-based progression** with increasing rewards and costs.
 
-🎮 Gameplay & Feedback
-⚡ Tap to earn coins, enhanced with multiplier visual effects.
+### 🎨 Visuals & UX
 
-⏳ Idle income generation over time.
+- 🌀 **DoTween Animations**: Smooth transitions and animated UI feedback.
+- 🎉 **Multiplier Effects**: Popping, scaling, and animated feedback on earning.
+- 📳 **Vibration Feedback**: Added via **Vibration Master** plugin for physical button feedback.
 
-🧮 Level-based progression with increasing rewards and costs.
+---
 
-🎨 Visuals & UX
-🌀 DoTween Animations: Smooth transitions and animated UI feedback.
+## 🧰 Tech Stack
 
-🎉 Multiplier Effects: Popping, scaling, and animated feedback on earning.
+| Component             | Description                                  |
+|-----------------------|----------------------------------------------|
+| **Unity 2D**          | Base engine for game development             |
+| **DoTween**           | Animation and tweening library               |
+| **Vibration Master**  | Native vibration integration                 |
+| **MockAPI**           | REST API used for data CRUD (GET, POST, PUT)|
+| **C# Command Pattern**| Action system for encapsulated behaviors     |
 
-📳 Vibration Feedback: Added via Vibration Master plugin for physical button feedback.
+---
+
+## 🌐 API Usage
+
+| Method | Purpose                          | Description                                        |
+|--------|----------------------------------|----------------------------------------------------|
+| `GET`  | Retrieve player data             | Gets current player levels and balance            |
+| `POST` | Create new player data           | Pushes new player entries to the server           |
+| `PUT`  | Update existing player progress  | Sends updated balance and upgrade levels          |
+
+---
+
+
+
