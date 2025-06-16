@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/IdleClickerRes/Scene/Menu_Test_Mode.unity
+    path: Assets/IdleClick(New)/Scene/IdleClicker(Main).unity
     guid: 7b0e31442a681384eae697170f52c06c
   - enabled: 0
     path: Packages/com.benoitfreslon.vibration/Vibration/Example/VibrationExample.unity
